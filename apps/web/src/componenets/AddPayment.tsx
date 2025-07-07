@@ -1,4 +1,7 @@
-import type { MonthlyPaymentCreate } from '../types/installment';
+import type {
+  InstallmentCreate,
+  MonthlyPaymentCreate,
+} from '../types/installment';
 import { useEffect, useMemo } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,16 +13,9 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { addInstallment } from '../features/installments/installmentsSlice';
 import { showNotification } from '@mantine/notifications';
 import { useTranslation } from 'react-i18next';
+import { sumByKeyDecimal } from '../utils/math';
 import * as yup from 'yup';
 import dayjs from 'dayjs';
-
-type FormValues = {
-  title: string;
-  amount: number;
-  startDate: string;
-  monthCount: number;
-  monthlyPayments: MonthlyPaymentCreate[];
-};
 
 const AddPayment = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +23,7 @@ const AddPayment = () => {
   const {
     addInstallment: { loading },
   } = useAppSelector((state) => state.installments);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const schema = useMemo(
     () =>
@@ -64,23 +60,29 @@ const AddPayment = () => {
               amount: yup
                 .number()
                 .positive(t('addPayment.error.monthlyPaymentAmountPositive'))
-                .required(t('addPayment.error.monthlyPaymentAmountRequired')),
+                .required(t('addPayment.error.monthlyPaymentAmountRequired'))
+                .transform((value, originalValue) => {
+                  return originalValue === '' ? undefined : value;
+                }),
             })
           )
           .default([])
-          .test(
-            'sum-equals-amount',
-            t('addPayment.error.sumMismatch'),
-            function (monthlyPayments) {
-              const { amount } = this.parent;
-              if (!monthlyPayments || !amount) return true;
-              const sum = monthlyPayments.reduce(
-                (acc, p) => acc + (p.amount || 0),
-                0
-              );
-              return sum.toFixed(2) === amount.toFixed(2);
-            }
-          ),
+          .test('sum-mismatch', function (monthlyPayments) {
+            const { amount } = this.parent;
+            if (!monthlyPayments || !amount) return true;
+
+            const sum = sumByKeyDecimal(monthlyPayments, 'amount');
+
+            const errorMessage = t('addPayment.error.sumMismatch', {
+              sum: sum.toFixed(2),
+              amount: amount.toFixed(2),
+            });
+
+            return (
+              sum.toFixed(2) === amount.toFixed(2) ||
+              this.createError({ message: errorMessage })
+            );
+          }),
       }),
     [t]
   );
@@ -90,8 +92,9 @@ const AddPayment = () => {
     handleSubmit,
     control,
     watch,
+    reset,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<InstallmentCreate>({
     defaultValues: {
       startDate: dayjs().add(1, 'month').startOf('month').format('YYYY-MM-DD'),
       monthCount: 1,
@@ -108,6 +111,18 @@ const AddPayment = () => {
   const amount = watch('amount');
   const monthCount = watch('monthCount');
   const startDate = watch('startDate');
+
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      reset(watch());
+    };
+
+    i18n.on('languageChanged', handleLanguageChange);
+
+    return () => {
+      i18n.off('languageChanged');
+    };
+  }, [i18n, reset, watch]);
 
   useEffect(() => {
     if (amount > 0 && monthCount > 0 && startDate) {
@@ -131,7 +146,7 @@ const AddPayment = () => {
     }
   }, [amount, monthCount, startDate, replace]);
 
-  const onSubmit = async (data: FormValues): Promise<void> => {
+  const onSubmit = async (data: InstallmentCreate): Promise<void> => {
     try {
       const resultAction = await dispatch(addInstallment(data));
 
@@ -181,7 +196,7 @@ const AddPayment = () => {
         </button>
       </div>
 
-      <div className='relative'>
+      <div className='relative w-full max-w-5xl mx-auto'>
         <LoadingOverlay
           visible={loading}
           loaderProps={{ children: <Loader size='sm' type='dots' /> }}
@@ -191,7 +206,7 @@ const AddPayment = () => {
         <form
           id='add-payment-form'
           onSubmit={handleSubmit(onSubmit)}
-          className='w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white rounded-md shadow'
+          className='w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white rounded-md shadow'
         >
           <div className='flex flex-col gap-4'>
             <div>
@@ -334,6 +349,8 @@ const AddPayment = () => {
                               date ? dayjs(date).format('YYYY-MM-DD') : ''
                             )
                           }
+                          minDate={dayjs(field.value).startOf('month').toDate()}
+                          maxDate={dayjs(field.value).endOf('month').toDate()}
                           valueFormat='DD-MM-YYYY'
                           error={errors.startDate?.message}
                           className='whitespace-nowrap'
@@ -360,6 +377,9 @@ const AddPayment = () => {
                           hideControls
                           className='grow'
                           size='md'
+                          error={
+                            errors.monthlyPayments?.[index]?.amount?.message
+                          }
                         />
                       )}
                     />
