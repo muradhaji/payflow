@@ -66,7 +66,7 @@ Two small fixes are included because the move needs them anyway:
 
 **Import** (branch `001/import-apps`)
 - [x] T7 `nx import` both repos from GitHub into `apps/web` and `apps/api`, with history kept. First, `feature/swagger` was merged into the old backend `main` ([payflow-backend#1](https://github.com/muradhaji/payflow-backend/pull/1)), because production already ran it.
-- [ ] T8 Rename the packages to `@payflow/web` and `@payflow/api`. Keep one root lockfile, and pin any direct dependency that drifted.
+- [x] T8 Rename the packages to `@payflow/web` and `@payflow/api`. Keep one root lockfile, and pin any direct dependency that drifted.
 - [ ] T9 Build both apps, and start both locally against a non-production database.
 
 **Config** (branch `001/nx-config`)
