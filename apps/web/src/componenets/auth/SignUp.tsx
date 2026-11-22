@@ -1,0 +1,214 @@
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Link, useNavigate } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
+
+import {
+  Button,
+  Card,
+  Flex,
+  Loader,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
+
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { signup } from '../../features/auth/authSlice';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { ERROR_MESSAGES } from '../../constants/messages';
+import { REGEX } from '../../constants/regex';
+import { VALIDATION } from '../../constants/validation';
+
+const SignupSchema = yup.object().shape({
+  username: yup
+    .string()
+    .required(ERROR_MESSAGES.AUTH.USERNAME_REQUIRED)
+    .min(
+      VALIDATION.AUTH.USERNAME_MIN_LENGTH,
+      ERROR_MESSAGES.AUTH.USERNAME_MIN_LENGTH
+    )
+    .max(
+      VALIDATION.AUTH.USERNAME_MAX_LENGTH,
+      ERROR_MESSAGES.AUTH.USERNAME_MAX_LENGTH
+    )
+    .matches(REGEX.AUTH.USERNAME, ERROR_MESSAGES.AUTH.USERNAME_INVALID),
+  password: yup
+    .string()
+    .required(ERROR_MESSAGES.AUTH.PASSWORD_REQUIRED)
+    .min(
+      VALIDATION.AUTH.PASSWORD_MIN_LENGTH,
+      ERROR_MESSAGES.AUTH.PASSWORD_MIN_LENGTH
+    )
+    .max(
+      VALIDATION.AUTH.PASSWORD_MAX_LENGTH,
+      ERROR_MESSAGES.AUTH.PASSWORD_MAX_LENGTH
+    )
+    .matches(REGEX.AUTH.PASSWORD, ERROR_MESSAGES.AUTH.PASSWORD_INVALID),
+  confirmPassword: yup
+    .string()
+    .required(ERROR_MESSAGES.AUTH.CONFIRM_PASSWORD_REQUIRED)
+    .oneOf([yup.ref('password')], ERROR_MESSAGES.AUTH.CONFIRM_PASSWORD_MATCH),
+});
+
+type SignupFormInputs = {
+  username: string;
+  password: string;
+  confirmPassword: string;
+};
+
+const SignUp = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { loading, error: apiError } = useAppSelector((state) => state.auth);
+  const { t: translate } = useTranslation();
+
+  const { themedColor } = useThemeColors();
+
+  const {
+    register: formRegister,
+    handleSubmit,
+    formState: { errors: formErrors },
+  } = useForm<SignupFormInputs>({
+    resolver: yupResolver(SignupSchema),
+  });
+
+  const onSubmit = async (data: SignupFormInputs) => {
+    try {
+      await dispatch(signup(data)).unwrap();
+      navigate('/payments', { replace: true });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <Flex flex={1} align='center' justify='center' p='md'>
+      <Card
+        p='lg'
+        bg={themedColor('white', 'dark.7')}
+        withBorder
+        bdrs='sm'
+        shadow='md'
+        w='100%'
+        maw={400}
+      >
+        <Stack gap='xl'>
+          <Title order={2} size='h2' fw={700} ta='center'>
+            <Trans
+              i18nKey='forms.signup.title'
+              components={{
+                1: <Text span c={themedColor('blue', 'blue.4')} inherit />,
+                2: <Text span c={themedColor('gray.9', 'dark.0')} inherit />,
+              }}
+            />
+          </Title>
+
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <Stack gap='md'>
+              <TextInput
+                label={translate('forms.signup.fields.username.label')}
+                labelProps={{ mb: 'xs' }}
+                placeholder={translate(
+                  'forms.signup.fields.username.placeholder'
+                )}
+                {...formRegister('username')}
+                error={
+                  formErrors.username
+                    ? translate(
+                        `forms.signup.errors.form.${formErrors.username.message}`
+                      )
+                    : null
+                }
+                disabled={loading}
+                radius='sm'
+                size='md'
+              />
+
+              <PasswordInput
+                label={translate('forms.signup.fields.password.label')}
+                labelProps={{ mb: 'xs' }}
+                placeholder={translate(
+                  'forms.signup.fields.password.placeholder'
+                )}
+                {...formRegister('password')}
+                error={
+                  formErrors.password
+                    ? translate(
+                        `forms.signup.errors.form.${formErrors.password.message}`
+                      )
+                    : null
+                }
+                disabled={loading}
+                radius='sm'
+                size='md'
+              />
+
+              <PasswordInput
+                label={translate('forms.signup.fields.confirmPassword.label')}
+                labelProps={{ mb: 'xs' }}
+                placeholder={translate(
+                  'forms.signup.fields.confirmPassword.placeholder'
+                )}
+                {...formRegister('confirmPassword')}
+                error={
+                  formErrors.confirmPassword
+                    ? translate(
+                        `forms.signup.errors.form.${formErrors.confirmPassword.message}`
+                      )
+                    : null
+                }
+                disabled={loading}
+                radius='sm'
+                size='md'
+              />
+
+              <Button
+                type='submit'
+                fullWidth
+                size='sm'
+                loading={loading}
+                loaderProps={{
+                  children: <Loader size='sm' type='dots' color='white' />,
+                }}
+                color={themedColor('blue', 'blue.4')}
+                radius='sm'
+              >
+                {translate(`buttons.signup.label`)}
+              </Button>
+
+              {apiError && (
+                <Text c='red' size='sm'>
+                  {translate(`apiErrorMessages.${apiError}`, {
+                    defaultValue: translate(
+                      `apiErrorMessages.${ERROR_MESSAGES.UNKNOWN}`
+                    ),
+                  })}
+                </Text>
+              )}
+
+              <Flex justify='center' gap='xs'>
+                <Text size='sm'>{translate('forms.signup.loginPrompt')}</Text>
+                <Text
+                  size='sm'
+                  component={Link}
+                  to='/login'
+                  c={themedColor('blue', 'blue.4')}
+                  style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  {translate('forms.signup.loginLink')}
+                </Text>
+              </Flex>
+            </Stack>
+          </form>
+        </Stack>
+      </Card>
+    </Flex>
+  );
+};
+
+export default SignUp;
