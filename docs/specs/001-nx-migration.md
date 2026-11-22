@@ -67,11 +67,11 @@ Two small fixes are included because the move needs them anyway:
 **Import** (branch `001/import-apps`)
 - [x] T7 `nx import` both repos from GitHub into `apps/web` and `apps/api`, with history kept. First, `feature/swagger` was merged into the old backend `main` ([payflow-backend#1](https://github.com/muradhaji/payflow-backend/pull/1)), because production already ran it.
 - [x] T8 Rename the packages to `@payflow/web` and `@payflow/api`. Keep one root lockfile, and pin any direct dependency that drifted.
-- [ ] T9 Build both apps, and start both locally against a non-production database.
+- [x] T9 Build both apps, and start both locally against a non-production database. Done against `payflow-dev`: builds, cache and lint pass, and the API passed a signup-to-delete round trip.
 
 **Config** (branch `001/nx-config`)
 - [ ] T10 Cache `build` outputs (`{projectRoot}/dist`). Pin Node in `.nvmrc`. Add root `dev`/`build`/`lint` scripts.
-- [ ] T11 Read the API URL from `VITE_API_BASE_URL`. Add `.env.example` files.
+- [ ] T11 Read the API URL from `VITE_API_BASE_URL`. Add `.env.example` files, with local `PORT=5050`: on macOS, port 5000 is taken by AirPlay Receiver.
 - [ ] T12 Folder renames, as two separate commits.
 
 **CI** (branch `001/ci`)

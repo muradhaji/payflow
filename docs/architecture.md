@@ -16,6 +16,15 @@ Installment tracker. A user creates an installment (title, total amount in AZN, 
 | Hosting | Vercel (Hobby), SPA rewrite in `vercel.json` | Render (free web service) |
 | Tests / lint | ESLint only | none |
 
+## Databases
+
+MongoDB Atlas, one cluster, one database per environment:
+
+| Environment | Database | Used by |
+|---|---|---|
+| Production | `payflow-prod` | the API on Render |
+| Local development | `payflow-dev` | `apps/api/.env` (gitignored) |
+
 ## Entities
 
 - **User**: `username` (unique, 6–20 chars, `[a-z0-9]`), `password` (bcrypt hash).
