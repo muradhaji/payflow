@@ -4,7 +4,7 @@ Goals run in order: **G1**, then **G2**, then **G3**.
 
 | # | Spec | Goal | Status |
 |---|---|---|---|
-| – | Write `product.md` (current features and user stories) | Foundation | planned |
+| – | Write [`product/`](product/) (current features and user stories, one file each) | Foundation | in progress |
 | [001](specs/001-nx-migration.md) | Nx migration: one repo, CI, deploys (no behavior change) | G1 Nx | in progress |
 | 002 | Backend hardening: crash fix, dependency updates, rate limiting, CORS | G2 Backend | planned |
 | 003 | API contract tests | G2 Backend | planned |
