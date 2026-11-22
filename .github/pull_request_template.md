@@ -11,5 +11,5 @@
 ## Checklist
 
 - [ ] No secrets or local paths in the diff
-- [ ] `docs/product.md` updated if behavior changed
+- [ ] Feature files in `docs/product/` updated if behavior changed
 - [ ] Tasks ticked in the spec

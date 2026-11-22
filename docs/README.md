@@ -2,7 +2,7 @@
 
 | File | What it is |
 |---|---|
-| [`product.md`](product.md) | How the app works **now**: features and user stories. Always kept up to date. |
+| [`product/`](product/) | How the app works **now**: one file per feature, with user stories. Always kept up to date. |
 | [`roadmap.md`](roadmap.md) | What we do next: goals and specs, in order. |
 | [`specs/`](specs/) | One file per change: what, why, how and the task checklist. |
 | [`architecture.md`](architecture.md) | Stack, apps, hosting. |
@@ -14,7 +14,7 @@
 1. **Pick** the next spec from `roadmap.md`.
 2. **Write** `specs/NNN-name.md` from [`specs/_template.md`](specs/_template.md). Agree on it before coding.
 3. **Do** the tasks one by one. Each change goes through a pull request.
-4. **Update** `product.md` so it matches the new behavior. This is the last task of every spec.
+4. **Update** the feature files in `product/` so they match the new behavior. This is the last task of every spec.
 5. **Close:** mark the spec `done` in its file and in `roadmap.md`.
 
 ## Rules
