@@ -19,7 +19,7 @@ Two small fixes are included because the move needs them anyway:
 2. On a fresh clone, `npm ci && npx nx run-many -t build` works, and the second run comes from the cache.
 3. A PR that changes only `apps/api` builds only the API in CI, and Vercel skips the web build.
 4. Production web (same Vercel domain) uses the new Render API and passes [`smoke-test.md`](../smoke-test.md).
-5. Logged-in users stay logged in after the switch (same `JWT_SECRET`).
+5. Logged-in users stay logged in after the switch (same `JWT_SECRET`), and `/api-docs` on the new API lists all endpoints.
 6. Direct pushes to `main` are rejected, and PRs can't be merged until CI passes.
 7. The old Render service is deleted and the old repos are archived.
 
@@ -32,7 +32,7 @@ Two small fixes are included because the move needs them anyway:
 - **CI:** GitHub Actions runs `nx affected -t lint build` on every PR. It becomes a required check on `main`.
 - **API on Render (free):** a **new** service from a committed `render.yaml`.
   - Build: `npm ci --workspace=@payflow/api --include-workspace-root && npx nx build @payflow/api`
-  - Start: `node apps/api/dist/index.js`
+  - Start: `cd apps/api && node dist/index.js`. Swagger reads `src/routes/*.ts` relative to the start folder, so starting from the repo root would leave `/api-docs` empty.
   - It rebuilds only when `apps/api/**` or the root config changes (build filter).
   - It uses the same `MONGO_URI` and `JWT_SECRET` as the old service, entered in the dashboard and never committed.
 - **Web on Vercel (Hobby):** the **existing** project is reconnected to this repo, so the domain stays.
@@ -65,13 +65,13 @@ Two small fixes are included because the move needs them anyway:
 - [x] T6 Add the docs and PR template. Branch `001/docs`.
 
 **Import** (branch `001/import-apps`)
-- [ ] T7 `nx import ../payflow-frontend apps/web` and `nx import ../payflow-backend apps/api`. Check that history is kept.
-- [ ] T8 Rename the packages to `@payflow/web` and `@payflow/api`. Keep one root lockfile, and pin any direct dependency that drifted.
-- [ ] T9 Build both apps, and start both locally against a non-production database.
+- [x] T7 `nx import` both repos from GitHub into `apps/web` and `apps/api`, with history kept. First, `feature/swagger` was merged into the old backend `main` ([payflow-backend#1](https://github.com/muradhaji/payflow-backend/pull/1)), because production already ran it.
+- [x] T8 Rename the packages to `@payflow/web` and `@payflow/api`. Keep one root lockfile, and pin any direct dependency that drifted.
+- [x] T9 Build both apps, and start both locally against a non-production database. Done against `payflow-dev`: builds, cache and lint pass, and the API passed a signup-to-delete round trip.
 
 **Config** (branch `001/nx-config`)
 - [ ] T10 Cache `build` outputs (`{projectRoot}/dist`). Pin Node in `.nvmrc`. Add root `dev`/`build`/`lint` scripts.
-- [ ] T11 Read the API URL from `VITE_API_BASE_URL`. Add `.env.example` files.
+- [ ] T11 Read the API URL from `VITE_API_BASE_URL`. Add `.env.example` files, with local `PORT=5050`: on macOS, port 5000 is taken by AirPlay Receiver.
 - [ ] T12 Folder renames, as two separate commits.
 
 **CI** (branch `001/ci`)

@@ -15,4 +15,4 @@ Goals run in order: **G1**, then **G2**, then **G3**.
 | 008 | Design system and layout (redesign foundation) | G3 Frontend | planned |
 | 009+ | Page redesigns and feature changes (one spec each, defined later) | G3 Frontend | planned |
 
-**Later:** OpenAPI docs, mobile app (Expo), staging environment.
+**Later:** generate the API docs from the shared schemas, replacing today's hand-written Swagger comments; mobile app (Expo); staging environment.

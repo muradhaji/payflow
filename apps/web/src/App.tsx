@@ -1,0 +1,118 @@
+import { Route, Routes } from 'react-router-dom';
+
+import {
+  createTheme,
+  localStorageColorSchemeManager,
+  MantineProvider,
+} from '@mantine/core';
+import { DatesProvider } from '@mantine/dates';
+import { Notifications } from '@mantine/notifications';
+import { useTranslation } from 'react-i18next';
+
+import Home from './componenets/Home';
+import Login from './componenets/auth/Login';
+import SignUp from './componenets/auth/SignUp';
+import PrivateRoute from './componenets/auth/PrivateRoute';
+import NotFound from './componenets/common/NotFound/NotFound';
+
+import Filters from './componenets/filters/Filters';
+import FilterOverdue from './componenets/filters/FilterOverdue';
+import FilterCurrent from './componenets/filters/FilterCurrent';
+import FilterRemaining from './componenets/filters/FilterRemaining';
+import FilterPaid from './componenets/filters/FilterPaid';
+
+import InstallmentsLayout from './componenets/installments/InstallmentsLayout';
+import AllInstallments from './componenets/installments/AllInstallments/AllInstallments';
+import AddInstallment from './componenets/installments/AddInstallment/AddInstallment';
+import EditInstallment from './componenets/installments/EditInstallment/EditInstallment';
+import InstallmentDetails from './componenets/installments/InstallmentDetails.tsx/InstallmentDetails';
+
+import Layout from './componenets/common/Layout/Layout';
+
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
+import './App.css';
+import { ModalsProvider } from '@mantine/modals';
+import { useEffect } from 'react';
+
+const theme = createTheme({
+  breakpoints: {
+    xs: '576px',
+    sm: '768px',
+    md: '992px',
+    lg: '1200px',
+    xl: '1400px',
+  },
+  cursorType: 'pointer',
+});
+
+const colorSchemeManager = localStorageColorSchemeManager({
+  key: 'my-app-color-scheme',
+});
+
+function App() {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    const saved = localStorage.getItem('my-app-color-scheme');
+    const scheme = saved === 'dark' ? 'dark' : 'light';
+    const metaTheme = document.querySelector('meta[name=theme-color]');
+    if (metaTheme) {
+      metaTheme.setAttribute(
+        'content',
+        scheme === 'dark' ? '#141414' : '#ffffff'
+      );
+    }
+  }, []);
+
+  return (
+    <div className='font-sans'>
+      <MantineProvider
+        theme={theme}
+        colorSchemeManager={colorSchemeManager}
+        defaultColorScheme='light'
+      >
+        <Notifications position='top-center' />
+        <DatesProvider settings={{ locale: i18n.language }}>
+          <ModalsProvider>
+            <Routes>
+              <Route path='/' element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/signup' element={<SignUp />} />
+
+                <Route
+                  path='/payments'
+                  element={
+                    <PrivateRoute>
+                      <InstallmentsLayout />
+                    </PrivateRoute>
+                  }
+                >
+                  <Route index element={<Filters />} />
+
+                  <Route path='overdue' element={<FilterOverdue />} />
+                  <Route path='current' element={<FilterCurrent />} />
+                  <Route path='remaining' element={<FilterRemaining />} />
+                  <Route path='paid' element={<FilterPaid />} />
+
+                  <Route path='all' element={<AllInstallments />} />
+                  <Route path='add' element={<AddInstallment />}></Route>
+                  <Route path='edit/:id' element={<EditInstallment />}></Route>
+                  <Route
+                    path='details/:id'
+                    element={<InstallmentDetails />}
+                  ></Route>
+                </Route>
+              </Route>
+              <Route path='*' element={<NotFound />} />
+            </Routes>
+          </ModalsProvider>
+        </DatesProvider>
+      </MantineProvider>
+    </div>
+  );
+}
+
+export default App;
