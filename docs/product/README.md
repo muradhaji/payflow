@@ -10,7 +10,7 @@ One file per feature. Each file lists **user stories** ("As a user I can…") wi
 | [Installments](installments.md) | `US-INST` | done |
 | [Payments](payments.md) | `US-PAY` | done |
 | [Dashboard and filters](dashboard.md) | `US-DASH` | done |
-| [Preferences](preferences.md) | `US-PREF` | to write |
+| [Preferences](preferences.md) | `US-PREF` | done |
 
 ## Glossary
 
