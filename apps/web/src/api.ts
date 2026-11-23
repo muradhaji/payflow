@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { STORAGE_KEYS } from './constants/common';
 
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+if (!baseURL) {
+  throw new Error('VITE_API_BASE_URL is not set');
+}
+
 const api = axios.create({
-  baseURL:
-    import.meta.env.API_BASE_URL ||
-    'https://payflow-backend-2aid.onrender.com/',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },

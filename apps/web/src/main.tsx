@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import App from './App.tsx';
-import FullPageSpinner from './componenets/common/FullPageSpinner/FullPageSpinner.tsx';
+import FullPageSpinner from './components/common/FullPageSpinner/FullPageSpinner.tsx';
 import { persistor, store } from './app/store.ts';
 
 import './i18n';

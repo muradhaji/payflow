@@ -6,6 +6,14 @@
     "apps/*",
     "libs/*"
   ],
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "nx run-many -t dev",
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint"
+  },
   "devDependencies": {
     "nx": "24.0.6"
   }
