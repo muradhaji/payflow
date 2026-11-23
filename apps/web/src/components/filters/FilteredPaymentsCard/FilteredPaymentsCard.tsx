@@ -40,7 +40,7 @@ const FilteredPaymentsCard = ({
   const color =
     type === 'remaining'
       ? themedColor('dark.5', 'gray.3')
-      : colorMap[type] ?? colorMap.default;
+      : (colorMap[type] ?? colorMap.default);
 
   const handleToggleAll = (): void => {
     toggleAllPayments(installmentId);

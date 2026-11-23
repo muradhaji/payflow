@@ -30,6 +30,6 @@ services:
       - key: JWT_SECRET
         sync: false
       - key: NX_DAEMON
-        value: "false"
+        value: 'false'
       - key: NX_NO_CLOUD
-        value: "true"
+        value: 'true'

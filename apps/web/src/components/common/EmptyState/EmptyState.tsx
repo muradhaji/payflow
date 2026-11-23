@@ -23,12 +23,12 @@ const EmptyState = ({
   const defaultTitle = t('components.emptyState.default.title');
   const defaultDescription = t('components.emptyState.default.description');
 
-  const renderIcon = icon === true ? defaultIcon : icon ?? null;
+  const renderIcon = icon === true ? defaultIcon : (icon ?? null);
 
-  const renderTitle = title === true ? defaultTitle : title ?? null;
+  const renderTitle = title === true ? defaultTitle : (title ?? null);
 
   const renderDescription =
-    description === true ? defaultDescription : description ?? null;
+    description === true ? defaultDescription : (description ?? null);
 
   return (
     <Box my={my}>

@@ -241,16 +241,16 @@ export const en = {
         form: {
           [ERROR_MESSAGES.INSTALLMENT.TITLE_REQUIRED]: 'Title is required.',
           [ERROR_MESSAGES.INSTALLMENT.TITLE_STRING]: 'Title must be a string.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .TITLE_MIN_LENGTH]: `Must be at least ${VALIDATION.INSTALLMENT.TITLE_MIN_LENGTH} characters.`,
-          [ERROR_MESSAGES.INSTALLMENT
-            .TITLE_MAX_LENGTH]: `Must be at most ${VALIDATION.INSTALLMENT.TITLE_MAX_LENGTH} characters.`,
+          [ERROR_MESSAGES.INSTALLMENT.TITLE_MIN_LENGTH]:
+            `Must be at least ${VALIDATION.INSTALLMENT.TITLE_MIN_LENGTH} characters.`,
+          [ERROR_MESSAGES.INSTALLMENT.TITLE_MAX_LENGTH]:
+            `Must be at most ${VALIDATION.INSTALLMENT.TITLE_MAX_LENGTH} characters.`,
 
           [ERROR_MESSAGES.INSTALLMENT.AMOUNT_REQUIRED]: 'Amount is required.',
           [ERROR_MESSAGES.INSTALLMENT.AMOUNT_NUMBER]:
             'Amount must be a number.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .AMOUNT_POSITIVE]: `Amount must be positive.`,
+          [ERROR_MESSAGES.INSTALLMENT.AMOUNT_POSITIVE]:
+            `Amount must be positive.`,
 
           [ERROR_MESSAGES.INSTALLMENT.START_DATE_REQUIRED]:
             'Start date is required.',
@@ -286,8 +286,8 @@ export const en = {
             'Payment amount is required.',
           [ERROR_MESSAGES.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_NUMBER]:
             'Payment amount must be a number.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .MONTHLY_PAYMENT_AMOUNT_POSITIVE]: `Payment amount must be greater than ${VALIDATION.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_MIN}.`,
+          [ERROR_MESSAGES.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_POSITIVE]:
+            `Payment amount must be greater than ${VALIDATION.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_MIN}.`,
         },
       },
     },
