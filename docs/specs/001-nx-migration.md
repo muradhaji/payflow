@@ -36,11 +36,14 @@ Two small fixes are included because the move needs them anyway:
   - It rebuilds only when `apps/api/**` or the root config changes (build filter).
   - It uses the same `MONGO_URI` and `JWT_SECRET` as the old service, entered in the dashboard and never committed.
 - **Web on Vercel (Hobby):** the **existing** project is reconnected to this repo, so the domain stays.
-  - Root directory: `apps/web`
+  - Root directory: `apps/web`, with "Include files outside the root directory" on
+  - Install: `cd ../.. && npm ci --workspace=@payflow/web --include-workspace-root --include=dev`. Without it, Vercel installs inside `apps/web` only, so the root `nx` package is missing ("Could not find Nx modules").
   - Build: `npx nx build @payflow/web`
   - Output: `dist`
   - Ignored build step: `npx nx-ignore@latest @payflow/web`
-  - `VITE_API_BASE_URL` = the new Render URL
+  - Node.js version: 22.x
+  - `VITE_API_BASE_URL` = `https://payflow-api-gpwu.onrender.com` (Production and Preview)
+  - These are set in the Vercel dashboard (Settings → Build and Deployment, Environment Variables).
 - **Switch with no downtime:**
   1. The new API runs next to the old one; both use the same database.
   2. Point Vercel at the new API.
@@ -56,8 +59,8 @@ Two small fixes are included because the move needs them anyway:
 
 **Prepare**
 - [x] T1 Clean both old repos. The only change was a stale `sass` section in the frontend lockfile, which was discarded.
-- [ ] T2 (Murad) Send the old Render and Vercel settings: region, build/start commands, root directory, Node version, env var **names** only.
-- [ ] T3 (Murad) Run `smoke-test.md` once on today's production.
+- [x] T2 (Murad) Send the old Render and Vercel settings: region, build/start commands, root directory, Node version, env var **names** only. Render: Oregon, free, Node 22.14.0 (default), no health check, env `MONGO_URI` and `JWT_SECRET`. Vercel domain: `payflow-live.vercel.app`.
+- [x] T3 (Murad) Run `smoke-test.md` once on today's production. Not run before the switch; replaced by the after-cutover run in T15.
 
 **Repo**
 - [x] T4 Create the workspace (`nx init`, npm workspaces). Commit `5cb35ff`.
@@ -78,8 +81,8 @@ Two small fixes are included because the move needs them anyway:
 - [x] T13 Add a workflow that runs `nx affected -t lint build`, then make it a required check on `main`.
 
 **Deploy**
-- [ ] T14 Add `render.yaml`. (Murad) Create the service from it in Render and enter the secrets. Check that the API answers.
-- [ ] T15 (Murad) In Vercel: set `VITE_API_BASE_URL`, reconnect the project to this repo and apply the settings above. Deploy and run the smoke test.
+- [x] T14 Add `render.yaml`. (Murad) Create the service from it in Render and enter the secrets. Check that the API answers. Live at `https://payflow-api-gpwu.onrender.com`: `/` and `/api-docs` (6 paths) answer, and a real login returns the user's installments.
+- [x] T15 (Murad) In Vercel: set `VITE_API_BASE_URL`, reconnect the project to this repo and apply the settings above. Deploy and run the smoke test. The first deploy failed until the install command was set (see How). The live bundle uses the new API, and the smoke test passed on 2026-11-24.
 
 **Finish**
 - [ ] T16 After a stable week: delete the old Render service, and archive both old repos with a "moved to payflow" README.
