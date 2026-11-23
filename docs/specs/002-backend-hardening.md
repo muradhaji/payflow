@@ -1,6 +1,6 @@
 # 002 — Backend hardening
 
-**Status:** approved · **Goal:** G2 · **Affects:** api, web (error messages), infra, tooling · **Stories:** changes US-AUTH-02, adds US-AUTH-07
+**Status:** in progress · **Goal:** G2 · **Affects:** api, web (error messages), infra, tooling · **Stories:** changes US-AUTH-02, adds US-AUTH-07
 
 ## Why
 The API in production has known safety problems (details in [`archive/assessment-2026-11.md`](../archive/assessment-2026-11.md)):
@@ -45,7 +45,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - **Rollback:** in Render, redeploy the previous deploy; in GitHub, revert the merge.
 
 ## Tasks
-- [ ] T1 Add Prettier config and `format`/`format:check` scripts; add the check to CI. Separate commit if existing files need reformatting.
+- [x] T1 Add Prettier config and `format`/`format:check` scripts; add the check to CI. Separate commit if existing files need reformatting.
 - [ ] T2 Update dependencies within major versions for both apps, restore `^` ranges; build, lint and local round trip pass; `npm audit` clean.
 - [ ] T3 API: `asyncHandler` on all async routes and middleware, plus a final error handler (`500 UNKNOWN`).
 - [ ] T4 API: string checks for username and password, `404` for invalid ids, `400 USERNAME_EXISTS` on duplicate key.
