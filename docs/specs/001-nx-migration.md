@@ -75,7 +75,7 @@ Two small fixes are included because the move needs them anyway:
 - [x] T12 Folder renames, as two separate commits.
 
 **CI** (branch `001/ci`)
-- [ ] T13 Add a workflow that runs `nx affected -t lint build`, then make it a required check on `main`.
+- [x] T13 Add a workflow that runs `nx affected -t lint build`, then make it a required check on `main`.
 
 **Deploy**
 - [ ] T14 Add `render.yaml`. (Murad) Create the service from it in Render and enter the secrets. Check that the API answers.
