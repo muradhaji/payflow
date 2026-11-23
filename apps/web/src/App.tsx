@@ -25,7 +25,7 @@ import InstallmentsLayout from './components/installments/InstallmentsLayout';
 import AllInstallments from './components/installments/AllInstallments/AllInstallments';
 import AddInstallment from './components/installments/AddInstallment/AddInstallment';
 import EditInstallment from './components/installments/EditInstallment/EditInstallment';
-import InstallmentDetails from './components/installments/InstallmentDetails.tsx/InstallmentDetails';
+import InstallmentDetails from './components/installments/InstallmentDetails/InstallmentDetails';
 
 import Layout from './components/common/Layout/Layout';
 
