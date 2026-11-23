@@ -17,7 +17,7 @@ Two small fixes are included because the move needs them anyway:
 ## Done when
 1. ✅ `git log --follow apps/web/src/App.tsx` and `apps/api/src/index.ts` show the original 2025 commits.
 2. ✅ On a fresh clone, `npm ci && npx nx run-many -t build` works, and the second run comes from the cache.
-3. ⚠️ A PR that changes only `apps/api` builds only the API in CI, and Vercel skips the web build. CI part proven (T13). The Vercel skip is configured but not yet seen on a real API-only commit; check it on the next one.
+3. ✅ A PR that changes only `apps/api` builds only the API in CI, and Vercel skips the web build. CI part proven in T13. Vercel skip observed on PR #13 (docs-only): "Canceled by Ignored Build Step", after fixing the command to start from the repo root.
 4. ✅ Production web (same Vercel domain) uses the new Render API and passes [`smoke-test.md`](../smoke-test.md).
 5. ✅ Logged-in users stay logged in after the switch (same `JWT_SECRET`), and `/api-docs` on the new API lists all endpoints. The new service uses the same secret value, and a real login works; an old session was not tested separately.
 6. ✅ Direct pushes to `main` are rejected, and PRs can't be merged until CI passes. Shown by the ruleset and by PR #9 being blocked while CI ran.
