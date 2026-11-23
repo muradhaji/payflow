@@ -1,0 +1,12 @@
+# Generated or third-party files
+package-lock.json
+dist
+node_modules
+.nx
+coverage
+
+# Imported history; kept as written
+docs/archive
+
+# Docs are prose; Prettier would re-pad every table
+*.md
