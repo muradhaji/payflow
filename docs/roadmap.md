@@ -6,7 +6,7 @@ Goals run in order: **G1**, then **G2**, then **G3**.
 |---|---|---|---|
 | – | Write [`product/`](product/) (current features and user stories, one file each) | Foundation | done |
 | [001](specs/001-nx-migration.md) | Nx migration: one repo, CI, deploys (no behavior change) | G1 Nx | done |
-| 002 | Backend hardening: crash fix, dependency updates, rate limiting, CORS, shared Prettier config | G2 Backend | planned |
+| [002](specs/002-backend-hardening.md) | Backend hardening: crash fix, dependency updates, rate limiting, CORS, shared Prettier config | G2 Backend | approved |
 | 003 | API contract tests | G2 Backend | planned |
 | 004 | Shared schemas (Zod) for validation and types, used by web and API | G2 Backend | planned |
 | 005 | Payment state integrity: server-owned paid state, safe updates | G2 Backend | planned |
