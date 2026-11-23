@@ -40,7 +40,7 @@ Two small fixes are included because the move needs them anyway:
   - Install: `cd ../.. && npm ci --workspace=@payflow/web --include-workspace-root --include=dev`. Without it, Vercel installs inside `apps/web` only, so the root `nx` package is missing ("Could not find Nx modules").
   - Build: `npx nx build @payflow/web`
   - Output: `dist`
-  - Ignored build step: `npx nx-ignore@latest @payflow/web`
+  - Ignored build step: `cd ../.. && npx nx-ignore@latest @payflow/web`. Fixed after the spec was closed: without `cd ../..` the command crashed (no `nx.json` in `apps/web`), and Vercel built every commit.
   - Node.js version: 22.x
   - `VITE_API_BASE_URL` = `https://payflow-api-gpwu.onrender.com` (Production and Preview)
   - These are set in the Vercel dashboard (Settings → Build and Deployment, Environment Variables).
