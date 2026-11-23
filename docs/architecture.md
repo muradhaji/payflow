@@ -46,7 +46,7 @@ render.yaml                 API deploy config
 - Root directory `apps/web`, with "Include files outside the root directory" on
 - Install: `cd ../.. && npm ci --workspace=@payflow/web --include-workspace-root --include=dev`
 - Build: `npx nx build @payflow/web`, output `dist`
-- Ignored build step: `npx nx-ignore@latest @payflow/web`
+- Ignored build step: `cd ../.. && npx nx-ignore@latest @payflow/web`. Vercel runs it inside `apps/web`; without `cd ../..` it cannot find `nx.json`, crashes, and Vercel builds every commit.
 - Node.js 22.x; env `VITE_API_BASE_URL` = the API URL (Production and Preview)
 
 **Render** starts the API with `cd apps/api && node dist/index.js`, because Swagger reads `src/routes/*.ts` relative to the start folder. The free plan sleeps after about 15 minutes idle, so the first request can take up to a minute.
