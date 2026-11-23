@@ -46,7 +46,7 @@ The API in production has known safety problems (details in [`archive/assessment
 
 ## Tasks
 - [x] T1 Add Prettier config and `format`/`format:check` scripts; add the check to CI. Separate commit if existing files need reformatting.
-- [ ] T2 Update dependencies within major versions for both apps, restore `^` ranges; build, lint and local round trip pass; `npm audit` clean.
+- [x] T2 Update dependencies within major versions for both apps, restore `^` ranges; build, lint and local round trip pass; `npm audit` clean.
 - [ ] T3 API: `asyncHandler` on all async routes and middleware, plus a final error handler (`500 UNKNOWN`).
 - [ ] T4 API: string checks for username and password, `404` for invalid ids, `400 USERNAME_EXISTS` on duplicate key.
 - [ ] T5 API + web: single `401 INVALID_CREDENTIALS` for login; new message in AZ and EN.
