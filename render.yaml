@@ -1,0 +1,35 @@
+# Render Blueprint for the PayFlow API (apps/api).
+# Create the service once in Render: New → Blueprint → this repository.
+# Secrets (sync: false) are entered in the Render dashboard, never here.
+services:
+  - type: web
+    name: payflow-api
+    runtime: node
+    plan: free
+    region: oregon # same region as the Atlas cluster (AWS us-west-2)
+    branch: main
+    # Install only the API and the root tools (nx), including devDependencies for tsc.
+    buildCommand: npm ci --workspace=@payflow/api --include-workspace-root --include=dev && npx nx build @payflow/api
+    # Start inside apps/api: Swagger reads src/routes/*.ts relative to the start folder.
+    startCommand: cd apps/api && node dist/index.js
+    healthCheckPath: /
+    # Deploy a new commit on main only after its CI checks pass.
+    autoDeployTrigger: checksPass
+    # Rebuild only when the API or the shared root config changes.
+    buildFilter:
+      paths:
+        - apps/api/**
+        - package.json
+        - package-lock.json
+        - nx.json
+        - .nvmrc
+        - render.yaml
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: NX_DAEMON
+        value: "false"
+      - key: NX_NO_CLOUD
+        value: "true"

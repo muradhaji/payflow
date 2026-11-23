@@ -31,7 +31,7 @@ Two small fixes are included because the move needs them anyway:
 - **Node:** pinned in `.nvmrc` to the version Render uses today.
 - **CI:** GitHub Actions runs `nx affected -t lint build` on every PR. It becomes a required check on `main`.
 - **API on Render (free):** a **new** service from a committed `render.yaml`.
-  - Build: `npm ci --workspace=@payflow/api --include-workspace-root && npx nx build @payflow/api`
+  - Build: `npm ci --workspace=@payflow/api --include-workspace-root --include=dev && npx nx build @payflow/api`. `--include=dev` keeps TypeScript installed even if Render sets `NODE_ENV=production`.
   - Start: `cd apps/api && node dist/index.js`. Swagger reads `src/routes/*.ts` relative to the start folder, so starting from the repo root would leave `/api-docs` empty.
   - It rebuilds only when `apps/api/**` or the root config changes (build filter).
   - It uses the same `MONGO_URI` and `JWT_SECRET` as the old service, entered in the dashboard and never committed.
