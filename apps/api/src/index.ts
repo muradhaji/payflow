@@ -1,3 +1,4 @@
+// CI affected test (spec 001 T13): this line is reverted in the next commit.
 import express from 'express';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
