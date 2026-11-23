@@ -71,7 +71,7 @@ Two small fixes are included because the move needs them anyway:
 
 **Config** (branch `001/nx-config`)
 - [x] T10 Cache `build` outputs (`{projectRoot}/dist`). Pin Node in `.nvmrc`. Add root `dev`/`build`/`lint` scripts.
-- [ ] T11 Read the API URL from `VITE_API_BASE_URL`. Add `.env.example` files, with local `PORT=5050`: on macOS, port 5000 is taken by AirPlay Receiver.
+- [x] T11 Read the API URL from `VITE_API_BASE_URL`. Add `.env.example` files, with local `PORT=5050`: on macOS, port 5000 is taken by AirPlay Receiver.
 - [ ] T12 Folder renames, as two separate commits.
 
 **CI** (branch `001/ci`)
