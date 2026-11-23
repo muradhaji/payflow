@@ -1,6 +1,6 @@
 # 001 — Nx migration
 
-**Status:** in progress · **Goal:** G1 · **Affects:** infra, web, api, docs · **Stories:** none (no behavior change)
+**Status:** done (2026-11-24) · **Goal:** G1 · **Affects:** infra, web, api, docs · **Stories:** none (no behavior change)
 
 ## Why
 The frontend and backend live in two repos with duplicated models, validation and error codes. A change to both needs two PRs and two deploys in the right order, and there is no CI.
@@ -15,13 +15,13 @@ Two small fixes are included because the move needs them anyway:
 **Not included:** security fixes (002), dependency upgrades, shared libs (004), Nx plugins, tests, staging.
 
 ## Done when
-1. `git log --follow apps/web/src/App.tsx` and `apps/api/src/index.ts` show the original 2025 commits.
-2. On a fresh clone, `npm ci && npx nx run-many -t build` works, and the second run comes from the cache.
-3. A PR that changes only `apps/api` builds only the API in CI, and Vercel skips the web build.
-4. Production web (same Vercel domain) uses the new Render API and passes [`smoke-test.md`](../smoke-test.md).
-5. Logged-in users stay logged in after the switch (same `JWT_SECRET`), and `/api-docs` on the new API lists all endpoints.
-6. Direct pushes to `main` are rejected, and PRs can't be merged until CI passes.
-7. The old Render service is deleted and the old repos are archived.
+1. ✅ `git log --follow apps/web/src/App.tsx` and `apps/api/src/index.ts` show the original 2025 commits.
+2. ✅ On a fresh clone, `npm ci && npx nx run-many -t build` works, and the second run comes from the cache.
+3. ⚠️ A PR that changes only `apps/api` builds only the API in CI, and Vercel skips the web build. CI part proven (T13). The Vercel skip is configured but not yet seen on a real API-only commit; check it on the next one.
+4. ✅ Production web (same Vercel domain) uses the new Render API and passes [`smoke-test.md`](../smoke-test.md).
+5. ✅ Logged-in users stay logged in after the switch (same `JWT_SECRET`), and `/api-docs` on the new API lists all endpoints. The new service uses the same secret value, and a real login works; an old session was not tested separately.
+6. ✅ Direct pushes to `main` are rejected, and PRs can't be merged until CI passes. Shown by the ruleset and by PR #9 being blocked while CI ran.
+7. ✅ The old Render service is deleted and the old repos are archived.
 
 ## How
 - **Repo:** public `muradhaji/payflow`. Public, because GitHub Free only enforces branch rules on public repos. The old repos are public too, and their history has no secrets. Old repos get **archived, not deleted**.
@@ -85,5 +85,26 @@ Two small fixes are included because the move needs them anyway:
 - [x] T15 (Murad) In Vercel: set `VITE_API_BASE_URL`, reconnect the project to this repo and apply the settings above. Deploy and run the smoke test. The first deploy failed until the install command was set (see How). The live bundle uses the new API, and the smoke test passed on 2026-11-24.
 
 **Finish**
-- [ ] T16 After a stable week: delete the old Render service, and archive both old repos with a "moved to payflow" README.
-- [ ] T17 Update `architecture.md` and `roadmap.md`, and set status to `done`.
+- [x] T16 After a stable week: delete the old Render service, and archive both old repos with a "moved to payflow" README. The stable week was skipped: the only user is Murad, and the smoke test passed. README PRs: [payflow-frontend#10](https://github.com/muradhaji/payflow-frontend/pull/10), [payflow-backend#2](https://github.com/muradhaji/payflow-backend/pull/2); both repos archived on 2026-11-24.
+- [x] T17 Update `architecture.md` and `roadmap.md`, and set status to `done`.
+
+## Retro
+
+**Went well**
+- Both apps kept their full history, and production switched with no downtime.
+- Small steps, one PR per step, made every change easy to follow and undo.
+- Testing deploy commands in a clean clone first (Render, Vercel) caught the Swagger start-folder problem before production.
+
+**Surprises**
+- Production ran an unmerged branch (`feature/swagger`). It had to be merged into the old `main` before importing.
+- Merging two lockfiles silently upgraded 43 of 55 direct dependencies; they had to be pinned back.
+- macOS AirPlay Receiver holds port 5000, so local dev moved to 5050.
+- Vercel with a root directory installs only that folder, so it needed an explicit install command from the repo root.
+- Atlas needs the current IP on its access list, and new entries take a minute to activate.
+- Production data was in MongoDB's default `test` database; it was moved to `payflow-prod` separately.
+- An editor running Prettier reformatted a whole file; there is no shared formatting config yet.
+
+**Next time**
+- Check what production actually runs (branch, settings, database) before planning.
+- Add a shared Prettier config early (now in spec 002).
+- Note which dashboard settings exist, so they can be recorded or moved into config files.
