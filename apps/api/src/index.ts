@@ -11,6 +11,9 @@ dotenv.config();
 connectDB();
 
 const app = express();
+// Render puts one proxy in front of the API; without this, every user
+// would share the proxy's IP address and one rate limit.
+app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json());
 // Express 5 leaves req.body undefined when there is no JSON body; the

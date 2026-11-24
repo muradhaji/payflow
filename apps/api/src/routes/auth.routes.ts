@@ -9,6 +9,10 @@ import {
   checkDuplicateUsername,
   checkUserExists,
 } from '../middleware/auth.middleware';
+import {
+  loginLimiter,
+  signupLimiter,
+} from '../middleware/rateLimit.middleware';
 
 const router = express.Router();
 
@@ -47,6 +51,7 @@ const router = express.Router();
  */
 router.post(
   '/signup',
+  signupLimiter,
   validateUsername,
   checkDuplicateUsername,
   validatePassword,
@@ -94,6 +99,7 @@ router.post(
  */
 router.post(
   '/login',
+  loginLimiter,
   validateUsername,
   checkUserExists,
   validatePassword,

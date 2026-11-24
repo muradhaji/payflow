@@ -438,6 +438,9 @@ export const az = {
 
     [ERROR_MESSAGES.AUTH.USER_NOT_FOUND]: 'İstifadəçi tapılmadı.',
 
+    [ERROR_MESSAGES.TOO_MANY_REQUESTS]:
+      'Çox sayda cəhd edildi. Bir neçə dəqiqədən sonra yenidən cəhd edin.',
+
     [ERROR_MESSAGES.UNKNOWN]:
       'Naməlum bir xəta baş verdi. Daha sonra yenidən cəhd edin.',
   },

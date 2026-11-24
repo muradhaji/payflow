@@ -436,6 +436,9 @@ export const en = {
 
     [ERROR_MESSAGES.AUTH.USER_NOT_FOUND]: 'User not found.',
 
+    [ERROR_MESSAGES.TOO_MANY_REQUESTS]:
+      'Too many attempts. Please try again in a few minutes.',
+
     [ERROR_MESSAGES.UNKNOWN]:
       'An unknown error occurred. Please try again later.',
   },
