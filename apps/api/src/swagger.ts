@@ -10,10 +10,8 @@ const options: swaggerJsdoc.Options = {
       version: '1.0.0',
       description: 'PayFlow backend API with TypeScript & Swagger',
     },
-    servers: [
-      { url: 'https://payflow-backend-2aid.onrender.com/api' },
-      { url: 'http://localhost:5000/api' },
-    ],
+    // Relative: always calls the server this page is served from (local or Render).
+    servers: [{ url: '/api' }],
     components: {
       securitySchemes: {
         bearerAuth: {

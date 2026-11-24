@@ -55,3 +55,4 @@ The API in production has known safety problems (details in [`archive/assessment
 - [ ] T8 Run every "Done when" check locally against `payflow-dev`.
 - [ ] T9 (Murad) Set `CORS_ORIGINS` on Render, then merge; check the live API and run the smoke test.
 - [ ] T10 Update `product/auth.md` (US-AUTH-02, new US-AUTH-07, fixed bugs removed), `architecture.md` and `roadmap.md`; set status to `done`.
+- [x] T11 Swagger: use the relative server URL `/api`. Found during T3: Swagger still pointed to the deleted old Render service, so "Try it out" failed locally and in production.
