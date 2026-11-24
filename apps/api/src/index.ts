@@ -5,6 +5,7 @@ import installmentRoutes from './routes/installment.routes';
 import cors from 'cors';
 import connectDB from './config/db';
 import { setupSwagger } from './swagger';
+import { errorHandler } from './middleware/error.middleware';
 
 dotenv.config();
 connectDB();
@@ -20,6 +21,8 @@ app.get('/', (req, res) => {
 });
 app.use('/api/auth', authRoutes);
 app.use('/api/installments', installmentRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
