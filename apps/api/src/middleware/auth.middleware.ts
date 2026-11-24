@@ -151,7 +151,8 @@ export const checkUserExists = async (
   const user = await User.findOne({ username });
 
   if (!user) {
-    res.status(404).json({ message: ERROR_MESSAGES.AUTH.USER_NOT_FOUND });
+    // Same answer as a wrong password, so login does not reveal which usernames exist.
+    res.status(401).json({ message: ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS });
     return;
   }
 

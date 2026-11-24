@@ -49,7 +49,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - [x] T2 Update dependencies within major versions for both apps, restore `^` ranges; build, lint and local round trip pass; `npm audit` clean.
 - [x] T3 API: upgrade to Express 5, plus a final error handler (`500 UNKNOWN`).
 - [x] T4 API: string checks for username and password, `404` for invalid ids, `400 USERNAME_EXISTS` on duplicate key, empty `req.body` defaults to `{}`.
-- [ ] T5 API + web: single `401 INVALID_CREDENTIALS` for login; new message in AZ and EN.
+- [x] T5 API + web: single `401 INVALID_CREDENTIALS` for login; new message in AZ and EN.
 - [ ] T6 API + web: rate limit on login and sign-up with `trust proxy`; `429` message in AZ and EN.
 - [ ] T7 API: CORS allowlist from `CORS_ORIGINS` plus the preview pattern; `helmet`; `.env.example` and `render.yaml` updated.
 - [ ] T8 Run every "Done when" check locally against `payflow-dev`.

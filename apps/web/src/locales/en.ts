@@ -427,6 +427,8 @@ export const en = {
     [ERROR_MESSAGES.AUTH.PASSWORD_INVALID]:
       'Password must contain at least one letter and one number, cannot contain spaces.',
     [ERROR_MESSAGES.AUTH.PASSWORD_INCORRECT]: 'Incorrect password.',
+    [ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS]:
+      'Incorrect username or password.',
 
     [ERROR_MESSAGES.AUTH.TOKEN_NOT_PROVIDED]:
       'Authentication token not provided.',

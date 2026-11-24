@@ -429,6 +429,8 @@ export const az = {
     [ERROR_MESSAGES.AUTH.PASSWORD_INVALID]:
       'Şifrədə ən azı bir hərf və bir rəqəm olmalıdır, boşluq ola bilməz.',
     [ERROR_MESSAGES.AUTH.PASSWORD_INCORRECT]: 'Şifrə düzgün deyil.',
+    [ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS]:
+      'İstifadəçi adı və ya şifrə yanlışdır.',
 
     [ERROR_MESSAGES.AUTH.TOKEN_NOT_PROVIDED]:
       'Doğrulama tokeni təmin edilməyib.',

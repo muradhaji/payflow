@@ -89,10 +89,8 @@ router.post(
  *                   type: string
  *       400:
  *         description: Invalid username
- *       404:
- *         description: User not found
  *       401:
- *         description: Password incorrect
+ *         description: Incorrect username or password (INVALID_CREDENTIALS)
  */
 router.post(
   '/login',

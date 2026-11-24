@@ -27,7 +27,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   const isMatch = await bcrypt.compare(password, req.user!.password);
 
   if (!isMatch) {
-    res.status(401).json({ message: ERROR_MESSAGES.AUTH.PASSWORD_INCORRECT });
+    res.status(401).json({ message: ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS });
     return;
   }
 
