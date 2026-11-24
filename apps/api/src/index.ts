@@ -13,6 +13,12 @@ connectDB();
 const app = express();
 app.use(cors());
 app.use(express.json());
+// Express 5 leaves req.body undefined when there is no JSON body; the
+// validators expect an object (as in Express 4), so they can answer 400.
+app.use((req, _res, next) => {
+  req.body ??= {};
+  next();
+});
 
 setupSwagger(app);
 

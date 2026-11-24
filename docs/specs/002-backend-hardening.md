@@ -36,7 +36,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - **Prettier:** a root `.prettierrc` that matches the current code (single quotes, semicolons, 2 spaces), `.prettierignore` for build output, and `format`/`format:check` scripts. If the existing code doesn't fully match, one separate "format only" commit.
 - **Dependencies:** `npm update` within major versions for both apps, then exact pins replaced by `^` ranges again. Build, lint and the local round trip must still pass.
 - **Crash fix with Express 5:** upgrade `express` from 4 to 5. Express 5 passes errors from `async` handlers to the error middleware by itself, so no wrapper is needed on any route. One error-handling middleware at the end logs the error and answers `500 UNKNOWN`. This was first done with an `asyncHandler` wrapper on every route; it was replaced because each new route would need it, and forgetting it brings the crash back. The routes use no Express features that changed in version 5, and `@types/express` is already version 5.
-- **Input guards:** `username` and `password` must be strings (`400 USERNAME_INVALID` / `PASSWORD_INVALID`). Invalid ObjectIds answer `404`. A duplicate-key error from MongoDB answers `400 USERNAME_EXISTS`. Full validation with schemas comes in 004.
+- **Input guards:** `username` and `password` must be strings (`400 USERNAME_INVALID` / `PASSWORD_INVALID`). Invalid ObjectIds answer `404`. A duplicate-key error from MongoDB answers `400 USERNAME_EXISTS`. Express 5 leaves `req.body` undefined when a request has no JSON body; one middleware sets it to `{}` again, so validators answer `400` instead of failing. Full validation with schemas comes in 004.
 - **Login:** one error code `INVALID_CREDENTIALS` (`401`) for unknown user and wrong password. The web app gets the new message in AZ and EN.
 - **Rate limit:** `express-rate-limit` on `/api/auth/login` and `/api/auth/signup`: 10 requests per 15 minutes per IP, answering `429 TOO_MANY_REQUESTS`. `app.set('trust proxy', 1)`, because Render sits in front of the API and otherwise every user looks like the same IP.
 - **CORS:** allowed origins come from a `CORS_ORIGINS` environment variable (comma-separated), plus a pattern for Vercel preview URLs of this project. Local default: `http://localhost:5173`.
@@ -48,7 +48,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - [x] T1 Add Prettier config and `format`/`format:check` scripts; add the check to CI. Separate commit if existing files need reformatting.
 - [x] T2 Update dependencies within major versions for both apps, restore `^` ranges; build, lint and local round trip pass; `npm audit` clean.
 - [x] T3 API: upgrade to Express 5, plus a final error handler (`500 UNKNOWN`).
-- [ ] T4 API: string checks for username and password, `404` for invalid ids, `400 USERNAME_EXISTS` on duplicate key.
+- [x] T4 API: string checks for username and password, `404` for invalid ids, `400 USERNAME_EXISTS` on duplicate key, empty `req.body` defaults to `{}`.
 - [ ] T5 API + web: single `401 INVALID_CREDENTIALS` for login; new message in AZ and EN.
 - [ ] T6 API + web: rate limit on login and sign-up with `trust proxy`; `429` message in AZ and EN.
 - [ ] T7 API: CORS allowlist from `CORS_ORIGINS` plus the preview pattern; `helmet`; `.env.example` and `render.yaml` updated.
