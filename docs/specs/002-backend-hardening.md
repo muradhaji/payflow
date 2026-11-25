@@ -1,14 +1,14 @@
 # 002 — Backend hardening
 
-**Status:** done (2026-11-26) · **Goal:** G2 · **Affects:** api, web (error messages), infra, tooling · **Stories:** changes US-AUTH-02, adds US-AUTH-07
+**Status:** done (2026-11-26) · **Goal:** G2 · **Affects:** api, web (error messages), infra, tooling · **Stories:** changes [US-AUTH-02](../product/auth.md#us-auth-02-log-in), adds [US-AUTH-07](../product/auth.md#us-auth-07-protection-against-password-guessing)
 
 ## Why
-The API in production has known safety problems (details in [`archive/assessment-2026-11.md`](../archive/assessment-2026-11.md)):
+The API in production has known safety problems (details in the [assessment findings](../archive/assessment-2026-11.md#4-findings)):
 - **Anyone can crash it** (C1). Express 4 does not catch errors thrown in `async` handlers, so one malformed request ends the process. Examples: a password sent as an array, an invalid installment id in the URL, two sign-ups with the same name at once.
 - **Known-vulnerable dependencies** (H1). `npm audit` reports 1 critical (`mongoose`) and 6 high (`express`, `axios`, `react-router-dom` and their dependencies). All have fixes within the current major versions.
 - **Login can be brute-forced and leaks usernames** (H4). There is no attempt limit, and "User not found" vs "Incorrect password" tells an attacker which usernames exist.
 - **Any website may call the API** (M6). CORS is open to every origin, and there are no security headers.
-- **No shared code formatting.** Editors format files differently (seen in 001), which makes diffs noisy.
+- **No shared code formatting.** Editors format files differently (seen in [001](001-nx-migration.md)), which makes diffs noisy.
 
 ## What
 - The API no longer crashes on bad input or database errors. It answers with an error code instead.
@@ -17,7 +17,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - Only PayFlow's own web addresses (production, previews, localhost) may call the API, and responses carry standard security headers.
 - One Prettier config for the repo, matching today's style (single quotes), checked in CI.
 
-**Not included:** shared schemas and full validation (004), payment toggle fix (005), dates and money (006), tests (003), staging.
+**Not included:** shared schemas and full validation ([004](../roadmap.md)), payment toggle fix ([005](../roadmap.md)), dates and money ([006](../roadmap.md)), tests ([003](../roadmap.md)), staging.
 
 ## Done when
 1. ✅ These requests get an error response and the API keeps running:
@@ -36,7 +36,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - **Prettier:** a root `.prettierrc` that matches the current code (single quotes, semicolons, 2 spaces), `.prettierignore` for build output, and `format`/`format:check` scripts. If the existing code doesn't fully match, one separate "format only" commit.
 - **Dependencies:** `npm update` within major versions for both apps, then exact pins replaced by `^` ranges again. Build, lint and the local round trip must still pass.
 - **Crash fix with Express 5:** upgrade `express` from 4 to 5. Express 5 passes errors from `async` handlers to the error middleware by itself, so no wrapper is needed on any route. One error-handling middleware at the end logs the error and answers `500 UNKNOWN`. This was first done with an `asyncHandler` wrapper on every route; it was replaced because each new route would need it, and forgetting it brings the crash back. The routes use no Express features that changed in version 5, and `@types/express` is already version 5.
-- **Input guards:** `username` and `password` must be strings (`400 USERNAME_INVALID` / `PASSWORD_INVALID`). Invalid ObjectIds answer `404`. A duplicate-key error from MongoDB answers `400 USERNAME_EXISTS`. Express 5 leaves `req.body` undefined when a request has no JSON body; one middleware sets it to `{}` again, so validators answer `400` instead of failing. Full validation with schemas comes in 004.
+- **Input guards:** `username` and `password` must be strings (`400 USERNAME_INVALID` / `PASSWORD_INVALID`). Invalid ObjectIds answer `404`. A duplicate-key error from MongoDB answers `400 USERNAME_EXISTS`. Express 5 leaves `req.body` undefined when a request has no JSON body; one middleware sets it to `{}` again, so validators answer `400` instead of failing. Full validation with schemas comes in [004](../roadmap.md).
 - **Login:** one error code `INVALID_CREDENTIALS` (`401`) for unknown user and wrong password. The web app gets the new message in AZ and EN.
 - **Rate limit:** `express-rate-limit` on `/api/auth/login` and `/api/auth/signup`: 10 requests per 15 minutes per IP, answering `429 TOO_MANY_REQUESTS`. `app.set('trust proxy', 1)`, because Render sits in front of the API and otherwise every user looks like the same IP.
 - **CORS:** allowed origins come from `CORS_ORIGINS` (exact origins, comma-separated) and `CORS_ORIGIN_PATTERN` (a regex for this project's Vercel preview URLs). The API's own origin is always allowed, so Swagger keeps working. Local default: `http://localhost:5173`. Both values are not secret and live in `render.yaml`.
@@ -54,7 +54,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - [x] T7 API: CORS allowlist from `CORS_ORIGINS` plus the preview pattern; `helmet`; `.env.example` and `render.yaml` updated.
 - [x] T8 Run every "Done when" check locally against `payflow-dev`.
 - [x] T9 (Murad) Set `CORS_ORIGINS` and `CORS_ORIGIN_PATTERN` on Render (values from `render.yaml`), then merge; check the live API and run the smoke test. Merged as PR #15; live checks and smoke test passed on 2026-11-26.
-- [x] T10 Update `product/auth.md` (US-AUTH-02, new US-AUTH-07, fixed bugs removed), `architecture.md` and `roadmap.md`; set status to `done`.
+- [x] T10 Update `product/auth.md` ([US-AUTH-02](../product/auth.md#us-auth-02-log-in), new [US-AUTH-07](../product/auth.md#us-auth-07-protection-against-password-guessing), fixed bugs removed), `architecture.md` and `roadmap.md`; set status to `done`.
 - [x] T11 Swagger: use the relative server URL `/api`. Found during T3: Swagger still pointed to the deleted old Render service, so "Try it out" failed locally and in production.
 
 ## Retro
@@ -71,5 +71,5 @@ The API in production has known safety problems (details in [`archive/assessment
 - Several test-script bugs (a `wait` that waited for the server, shell quoting, a function named like the `code` command) looked like app failures at first.
 
 **Next time**
-- Spec 003 (API contract tests) runs against the Atlas `payflow-dev` database, as in 002. If Atlas refuses a connection, check the access list first (Murad fixes it); don't treat it as a test failure.
+- Spec [003](../roadmap.md) (API contract tests) runs against the Atlas `payflow-dev` database, as in 002. If Atlas refuses a connection, check the access list first (Murad fixes it); don't treat it as a test failure.
 - Test scripts: cap every wait, build JSON bodies in variables, and check the database connection before trusting a failure.

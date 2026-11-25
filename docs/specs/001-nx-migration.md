@@ -12,7 +12,7 @@ Two small fixes are included because the move needs them anyway:
 - The web app reads the API URL from `VITE_API_BASE_URL`. Today the env var is ignored and every build talks to production.
 - Folder renames: `componenets` → `components`, `InstallmentDetails.tsx/` → `InstallmentDetails/`.
 
-**Not included:** security fixes (002), dependency upgrades, shared libs (004), Nx plugins, tests, staging.
+**Not included:** security fixes ([002](002-backend-hardening.md)), dependency upgrades, shared libs ([004](../roadmap.md)), Nx plugins, tests, staging.
 
 ## Done when
 1. ✅ `git log --follow apps/web/src/App.tsx` and `apps/api/src/index.ts` show the original 2025 commits.
@@ -27,7 +27,7 @@ Two small fixes are included because the move needs them anyway:
 - **Repo:** public `muradhaji/payflow`. Public, because GitHub Free only enforces branch rules on public repos. The old repos are public too, and their history has no secrets. Old repos get **archived, not deleted**.
 - **Workspace:** created with `nx init` in an empty repo, plus npm workspaces (`apps/*`, `libs/*`). No plugins: each app keeps its own `package.json` scripts, and Nx runs and caches them.
 - **Import:** `nx import` brings each repo in with history, as `apps/web` and `apps/api`. Projects are named `@payflow/web` and `@payflow/api`.
-- **One lockfile:** after import, compare installed versions against the old repos (`npm ls --depth=0`) and pin any direct dependency that drifted. Upgrades happen in 002, on purpose.
+- **One lockfile:** after import, compare installed versions against the old repos (`npm ls --depth=0`) and pin any direct dependency that drifted. Upgrades happen in [002](002-backend-hardening.md), on purpose.
 - **Node:** pinned in `.nvmrc` to the version Render uses today.
 - **CI:** GitHub Actions runs `nx affected -t lint build` on every PR. It becomes a required check on `main`.
 - **API on Render (free):** a **new** service from a committed `render.yaml`.
@@ -106,5 +106,5 @@ Two small fixes are included because the move needs them anyway:
 
 **Next time**
 - Check what production actually runs (branch, settings, database) before planning.
-- Add a shared Prettier config early (now in spec 002).
+- Add a shared Prettier config early (now in [spec 002](002-backend-hardening.md)).
 - Note which dashboard settings exist, so they can be recorded or moved into config files.

@@ -11,7 +11,7 @@ As a user, I can select one or more unpaid payments and mark them as paid in one
 
 ## US-PAY-02 Undo a payment
 As a user, I can mark paid payments as unpaid again, for example after a mistake.
-- Same selection as US-PAY-01. The button is **CANCEL**.
+- Same selection as [US-PAY-01](payments.md#us-pay-01-mark-payments-as-paid). The button is **CANCEL**.
 - On success I see "Payments cancelled successfully." and the paid date is removed.
 - Available on the **Paid** page and in the **Paid** list on an installment's details.
 

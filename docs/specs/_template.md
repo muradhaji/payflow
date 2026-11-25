@@ -2,6 +2,8 @@
 
 **Status:** draft · **Goal:** G1/G2/G3 · **Affects:** web, api, libs, infra · **Stories:** adds/changes/removes US-…
 
+<!-- Link every spec, story and finding you mention; see "Links" in docs/README.md. -->
+
 ## Why
 What is wrong or missing today.
 

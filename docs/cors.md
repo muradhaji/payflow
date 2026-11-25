@@ -1,6 +1,6 @@
 # CORS in PayFlow
 
-How the API decides which websites may call it from a browser. The code is in [`apps/api/src/config/cors.ts`](../apps/api/src/config/cors.ts) (added in [spec 002](specs/002-backend-hardening.md), task T7).
+How the API decides which websites may call it from a browser. The code is in [`apps/api/src/config/cors.ts`](../apps/api/src/config/cors.ts) (added in [002/T7](specs/002-backend-hardening.md#tasks)).
 
 ## What CORS is
 
