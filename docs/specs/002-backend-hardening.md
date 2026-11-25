@@ -1,6 +1,6 @@
 # 002 — Backend hardening
 
-**Status:** in progress · **Goal:** G2 · **Affects:** api, web (error messages), infra, tooling · **Stories:** changes US-AUTH-02, adds US-AUTH-07
+**Status:** done (2026-11-26) · **Goal:** G2 · **Affects:** api, web (error messages), infra, tooling · **Stories:** changes US-AUTH-02, adds US-AUTH-07
 
 ## Why
 The API in production has known safety problems (details in [`archive/assessment-2026-11.md`](../archive/assessment-2026-11.md)):
@@ -20,16 +20,16 @@ The API in production has known safety problems (details in [`archive/assessment
 **Not included:** shared schemas and full validation (004), payment toggle fix (005), dates and money (006), tests (003), staging.
 
 ## Done when
-1. These requests get an error response and the API keeps running:
+1. ✅ These requests get an error response and the API keeps running:
    - `POST /api/auth/signup` with a password that is an array → `400`
    - `GET /api/installments/abc` with a valid token → `404 INSTALLMENT_NOT_FOUND`
    - two sign-ups with the same new username at the same time → one `201`, one `400 USERNAME_EXISTS`
-2. `npm audit --omit=dev` shows 0 critical and 0 high.
-3. Login with an unknown username and with a wrong password both return `401 INVALID_CREDENTIALS`, and the web app shows "Incorrect username or password".
-4. After 10 failed logins from one IP within 15 minutes, the next attempt gets `429 TOO_MANY_REQUESTS`, and the web app shows a clear message.
-5. A request with `Origin: https://example.com` gets no CORS permission; `payflow-live.vercel.app`, its preview URLs and `localhost:5173` do. Responses include `helmet` headers and no `X-Powered-By`.
-6. `npm run format:check` passes, and CI runs it.
-7. Production passes [`smoke-test.md`](../smoke-test.md) after deploy.
+2. ✅ `npm audit --omit=dev` shows 0 critical and 0 high.
+3. ✅ Login with an unknown username and with a wrong password both return `401 INVALID_CREDENTIALS`, and the web app shows "Incorrect username or password".
+4. ✅ After 10 failed logins from one IP within 15 minutes, the next attempt gets `429 TOO_MANY_REQUESTS`, and the web app shows a clear message.
+5. ✅ A request with `Origin: https://example.com` gets no CORS permission; `payflow-live.vercel.app`, its preview URLs and `localhost:5173` do. Responses include `helmet` headers and no `X-Powered-By`. (In production, `localhost:5173` is not allowed on purpose.)
+6. ✅ `npm run format:check` passes, and CI runs it.
+7. ✅ Production passes [`smoke-test.md`](../smoke-test.md) after deploy (2026-11-26).
 
 ## How
 - **Order:** formatting first, so later diffs only show real changes. Then dependencies, then the code changes one at a time, each with its own commit.
@@ -53,6 +53,23 @@ The API in production has known safety problems (details in [`archive/assessment
 - [x] T6 API + web: rate limit on login and sign-up with `trust proxy`; `429` message in AZ and EN.
 - [x] T7 API: CORS allowlist from `CORS_ORIGINS` plus the preview pattern; `helmet`; `.env.example` and `render.yaml` updated.
 - [x] T8 Run every "Done when" check locally against `payflow-dev`.
-- [ ] T9 (Murad) Set `CORS_ORIGINS` and `CORS_ORIGIN_PATTERN` on Render (values from `render.yaml`), then merge; check the live API and run the smoke test.
-- [ ] T10 Update `product/auth.md` (US-AUTH-02, new US-AUTH-07, fixed bugs removed), `architecture.md` and `roadmap.md`; set status to `done`.
+- [x] T9 (Murad) Set `CORS_ORIGINS` and `CORS_ORIGIN_PATTERN` on Render (values from `render.yaml`), then merge; check the live API and run the smoke test. Merged as PR #15; live checks and smoke test passed on 2026-11-26.
+- [x] T10 Update `product/auth.md` (US-AUTH-02, new US-AUTH-07, fixed bugs removed), `architecture.md` and `roadmap.md`; set status to `done`.
 - [x] T11 Swagger: use the relative server URL `/api`. Found during T3: Swagger still pointed to the deleted old Render service, so "Try it out" failed locally and in production.
+
+## Retro
+
+**Went well**
+- Every task was shown failing before the fix and passing after it, partly by hand in Swagger.
+- Choosing Express 5 over a wrapper on every route kept the route files unchanged and removed a whole class of mistakes.
+- The combined check (T8) found nothing new, because each task had already been tested on its own.
+
+**Surprises**
+- Express 5 changed one behavior: `req.body` is `undefined` without a JSON body. A test caught it before production.
+- Swagger still pointed at the deleted old Render service (T11).
+- Local testing depended on Atlas accepting a frequently changing IP address; most "failures" were the database refusing connections, not the code. The access list now allows all IPs.
+- Several test-script bugs (a `wait` that waited for the server, shell quoting, a function named like the `code` command) looked like app failures at first.
+
+**Next time**
+- Spec 003 (API contract tests) runs against the Atlas `payflow-dev` database, as in 002. If Atlas refuses a connection, check the access list first (Murad fixes it); don't treat it as a test failure.
+- Test scripts: cap every wait, build JSON bodies in variables, and check the database connection before trusting a failure.
