@@ -101,7 +101,7 @@ Errors are returned as `{ message: ERROR_CODE }`. The web app translates the cod
 - **Input guards:** username and password must be strings; invalid ids answer `404`.
 - **Login:** unknown user and wrong password both answer `401 INVALID_CREDENTIALS`.
 - **Rate limit:** login (failed attempts only) and sign-up (all attempts): 10 per IP in 15 minutes, then `429 TOO_MANY_REQUESTS`. Counts are kept in memory, which fits one server. `trust proxy` is set to 1 for Render's proxy.
-- **CORS:** browsers may call the API only from `CORS_ORIGINS` (exact origins), origins matching `CORS_ORIGIN_PATTERN` (Vercel previews), and the API's own origin (Swagger). Values are in `render.yaml`; local default is `http://localhost:5173`.
+- **CORS:** browsers may call the API only from `CORS_ORIGINS` (exact origins), origins matching `CORS_ORIGIN_PATTERN` (Vercel previews), and the API's own origin (Swagger). Values are in `render.yaml`; local default is `http://localhost:5173`. How it works, with diagrams: [`cors.md`](cors.md).
 - **Headers:** `helmet` defaults (CSP, HSTS, `nosniff`, frame and referrer policies); no `X-Powered-By`.
 
 ## Known issues

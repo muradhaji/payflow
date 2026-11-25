@@ -6,6 +6,7 @@
 | [`roadmap.md`](roadmap.md) | What we do next: goals and specs, in order. |
 | [`specs/`](specs/) | One file per change: what, why, how and the task checklist. |
 | [`architecture.md`](architecture.md) | Stack, apps, hosting. |
+| [`cors.md`](cors.md) | Which websites may call the API, with diagrams. |
 | [`smoke-test.md`](smoke-test.md) | 10-step manual check after a deploy. |
 | [`archive/`](archive/) | Old documents kept as history. |
 
