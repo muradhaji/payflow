@@ -1,6 +1,6 @@
 # Architecture
 
-_How PayFlow is built and deployed today. Updated: 2026-11-24 (end of spec 001). The pre-monorepo review is in [`archive/assessment-2026-11.md`](archive/assessment-2026-11.md)._
+_How PayFlow is built and deployed today. Updated: 2026-11-26 (end of spec 002). The pre-monorepo review is in [`archive/assessment-2026-11.md`](archive/assessment-2026-11.md)._
 
 ## What it does
 
@@ -28,7 +28,7 @@ render.yaml                 API deploy config
 
 | | Web (`apps/web`) | API (`apps/api`) |
 |---|---|---|
-| Stack | React 19, Vite 6, Mantine 8, Redux Toolkit + redux-persist, axios, react-hook-form + yup, i18next, dayjs | Node, Express 4, Mongoose 8 (MongoDB Atlas), bcryptjs, jsonwebtoken, Swagger (`swagger-jsdoc`, `swagger-ui-express`) |
+| Stack | React 19, Vite 6, Mantine 8, Redux Toolkit + redux-persist, axios, react-hook-form + yup, i18next, dayjs | Node, Express 5, Mongoose 8 (MongoDB Atlas), bcryptjs, jsonwebtoken, Swagger (`swagger-jsdoc`, `swagger-ui-express`), `helmet`, `express-rate-limit` |
 | Language | TypeScript (strict), ESM | TypeScript (strict), compiled to CommonJS with `tsc` |
 | Config | `VITE_API_BASE_URL` (baked into the build) | `PORT`, `MONGO_URI`, `JWT_SECRET` |
 | Tests / lint | ESLint only | none |
@@ -53,7 +53,8 @@ render.yaml                 API deploy config
 
 ## CI and branch rules
 
-- **CI** (GitHub Actions, job `lint-and-build`): on every PR and push to `main`, runs `npx nx affected -t lint build`, so only the apps a change touches are checked.
+- **CI** (GitHub Actions, job `lint-and-build`): on every PR and push to `main`, runs `npm run format:check` (Prettier) and `npx nx affected -t lint build`, so only the apps a change touches are built.
+- **Formatting:** Prettier with `.prettierrc.json` (single quotes, trailing commas "es5"). Markdown is not formatted. Editors with a Prettier extension pick up the config automatically.
 - **`main` is protected** (ruleset `protect-main`): changes only via pull request, `lint-and-build` must pass on an up-to-date branch, no force push, no deletion. The owner merges.
 
 ## Databases
@@ -94,13 +95,22 @@ Atlas only accepts connections from IP addresses on its access list. When workin
 
 Errors are returned as `{ message: ERROR_CODE }`. The web app translates the codes with i18n. JWTs are HS256 and valid for 30 days, stored in `localStorage`.
 
+## API safety (spec 002)
+
+- **Errors:** Express 5 passes errors from `async` handlers to one error handler (`middleware/error.middleware.ts`), which answers `500 UNKNOWN` and logs the error. A duplicate username at the database answers `400 USERNAME_EXISTS`. A request without a JSON body gets `req.body = {}`.
+- **Input guards:** username and password must be strings; invalid ids answer `404`.
+- **Login:** unknown user and wrong password both answer `401 INVALID_CREDENTIALS`.
+- **Rate limit:** login (failed attempts only) and sign-up (all attempts): 10 per IP in 15 minutes, then `429 TOO_MANY_REQUESTS`. Counts are kept in memory, which fits one server. `trust proxy` is set to 1 for Render's proxy.
+- **CORS:** browsers may call the API only from `CORS_ORIGINS` (exact origins), origins matching `CORS_ORIGIN_PATTERN` (Vercel previews), and the API's own origin (Swagger). Values are in `render.yaml`; local default is `http://localhost:5173`.
+- **Headers:** `helmet` defaults (CSP, HSTS, `nosniff`, frame and referrer policies); no `X-Powered-By`.
+
 ## Known issues
 
-Deliberately not fixed in spec 001 (details in the assessment). Spec 002 addresses them first:
+Still open (details in the assessment; the roadmap says which spec addresses each):
 
-- C1: unhandled async errors crash the API.
-- H1: vulnerable dependencies.
 - H2/H3: payment state is client-controlled, and toggling it is not idempotent.
-- H4: no rate limiting; usernames can be enumerated.
 - M1/M2: dates and money representation.
-- No shared code formatting config yet (Prettier in editors can reformat whole files).
+- `npm audit`: 4 moderate findings in `i18next` and `swagger-jsdoc` (and their dependencies); fixes need major upgrades.
+- Atlas Network Access allows all IP addresses (`0.0.0.0/0`), because local development runs from changing IPs. The database users' passwords are the only protection; keep them strong and limited to their own database.
+
+Fixed in spec 002: C1 (crash on async errors), H1 (critical/high dependencies), H4 (no login limit, username leak), M6 (open CORS, no security headers), no shared formatting.
