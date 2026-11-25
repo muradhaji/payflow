@@ -30,6 +30,8 @@ jobs:
 
       - run: npm run format:check
 
+      - run: npm run docs:links
+
       - uses: nrwl/nx-set-shas@v5
 
       - run: npx nx affected -t lint build
