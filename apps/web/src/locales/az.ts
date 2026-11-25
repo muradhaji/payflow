@@ -243,16 +243,16 @@ export const az = {
           [ERROR_MESSAGES.INSTALLMENT.TITLE_REQUIRED]: 'Başlıq mütləqdir.',
           [ERROR_MESSAGES.INSTALLMENT.TITLE_STRING]:
             'Başlıq mətn tipində olmalıdır.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .TITLE_MIN_LENGTH]: `Ən azı ${VALIDATION.INSTALLMENT.TITLE_MIN_LENGTH} simvol olmalıdır.`,
-          [ERROR_MESSAGES.INSTALLMENT
-            .TITLE_MAX_LENGTH]: `Ən çox ${VALIDATION.INSTALLMENT.TITLE_MAX_LENGTH} simvol olmalıdır.`,
+          [ERROR_MESSAGES.INSTALLMENT.TITLE_MIN_LENGTH]:
+            `Ən azı ${VALIDATION.INSTALLMENT.TITLE_MIN_LENGTH} simvol olmalıdır.`,
+          [ERROR_MESSAGES.INSTALLMENT.TITLE_MAX_LENGTH]:
+            `Ən çox ${VALIDATION.INSTALLMENT.TITLE_MAX_LENGTH} simvol olmalıdır.`,
 
           [ERROR_MESSAGES.INSTALLMENT.AMOUNT_REQUIRED]: 'Məbləğ mütləqdir.',
           [ERROR_MESSAGES.INSTALLMENT.AMOUNT_NUMBER]:
             'Məbləğ ədəd tipində olmalıdır.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .AMOUNT_POSITIVE]: `Məbləğ müsbət olmalıdır.`,
+          [ERROR_MESSAGES.INSTALLMENT.AMOUNT_POSITIVE]:
+            `Məbləğ müsbət olmalıdır.`,
 
           [ERROR_MESSAGES.INSTALLMENT.START_DATE_REQUIRED]:
             'Başlama tarixi mütləqdir.',
@@ -288,8 +288,8 @@ export const az = {
             'Ödəniş məbləği mütləqdir.',
           [ERROR_MESSAGES.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_NUMBER]:
             'Ödəniş məbləği ədəd tipində olmalıdır.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .MONTHLY_PAYMENT_AMOUNT_POSITIVE]: `Ödəniş məbləği müsbət olmalıdır.`,
+          [ERROR_MESSAGES.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_POSITIVE]:
+            `Ödəniş məbləği müsbət olmalıdır.`,
         },
       },
     },
@@ -429,12 +429,17 @@ export const az = {
     [ERROR_MESSAGES.AUTH.PASSWORD_INVALID]:
       'Şifrədə ən azı bir hərf və bir rəqəm olmalıdır, boşluq ola bilməz.',
     [ERROR_MESSAGES.AUTH.PASSWORD_INCORRECT]: 'Şifrə düzgün deyil.',
+    [ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS]:
+      'İstifadəçi adı və ya şifrə yanlışdır.',
 
     [ERROR_MESSAGES.AUTH.TOKEN_NOT_PROVIDED]:
       'Doğrulama tokeni təmin edilməyib.',
     [ERROR_MESSAGES.AUTH.TOKEN_INVALID]: 'Doğrulama tokeni yanlışdır.',
 
     [ERROR_MESSAGES.AUTH.USER_NOT_FOUND]: 'İstifadəçi tapılmadı.',
+
+    [ERROR_MESSAGES.TOO_MANY_REQUESTS]:
+      'Çox sayda cəhd edildi. Bir neçə dəqiqədən sonra yenidən cəhd edin.',
 
     [ERROR_MESSAGES.UNKNOWN]:
       'Naməlum bir xəta baş verdi. Daha sonra yenidən cəhd edin.',

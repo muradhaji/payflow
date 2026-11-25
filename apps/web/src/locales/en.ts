@@ -241,16 +241,16 @@ export const en = {
         form: {
           [ERROR_MESSAGES.INSTALLMENT.TITLE_REQUIRED]: 'Title is required.',
           [ERROR_MESSAGES.INSTALLMENT.TITLE_STRING]: 'Title must be a string.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .TITLE_MIN_LENGTH]: `Must be at least ${VALIDATION.INSTALLMENT.TITLE_MIN_LENGTH} characters.`,
-          [ERROR_MESSAGES.INSTALLMENT
-            .TITLE_MAX_LENGTH]: `Must be at most ${VALIDATION.INSTALLMENT.TITLE_MAX_LENGTH} characters.`,
+          [ERROR_MESSAGES.INSTALLMENT.TITLE_MIN_LENGTH]:
+            `Must be at least ${VALIDATION.INSTALLMENT.TITLE_MIN_LENGTH} characters.`,
+          [ERROR_MESSAGES.INSTALLMENT.TITLE_MAX_LENGTH]:
+            `Must be at most ${VALIDATION.INSTALLMENT.TITLE_MAX_LENGTH} characters.`,
 
           [ERROR_MESSAGES.INSTALLMENT.AMOUNT_REQUIRED]: 'Amount is required.',
           [ERROR_MESSAGES.INSTALLMENT.AMOUNT_NUMBER]:
             'Amount must be a number.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .AMOUNT_POSITIVE]: `Amount must be positive.`,
+          [ERROR_MESSAGES.INSTALLMENT.AMOUNT_POSITIVE]:
+            `Amount must be positive.`,
 
           [ERROR_MESSAGES.INSTALLMENT.START_DATE_REQUIRED]:
             'Start date is required.',
@@ -286,8 +286,8 @@ export const en = {
             'Payment amount is required.',
           [ERROR_MESSAGES.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_NUMBER]:
             'Payment amount must be a number.',
-          [ERROR_MESSAGES.INSTALLMENT
-            .MONTHLY_PAYMENT_AMOUNT_POSITIVE]: `Payment amount must be greater than ${VALIDATION.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_MIN}.`,
+          [ERROR_MESSAGES.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_POSITIVE]:
+            `Payment amount must be greater than ${VALIDATION.INSTALLMENT.MONTHLY_PAYMENT_AMOUNT_MIN}.`,
         },
       },
     },
@@ -427,12 +427,17 @@ export const en = {
     [ERROR_MESSAGES.AUTH.PASSWORD_INVALID]:
       'Password must contain at least one letter and one number, cannot contain spaces.',
     [ERROR_MESSAGES.AUTH.PASSWORD_INCORRECT]: 'Incorrect password.',
+    [ERROR_MESSAGES.AUTH.INVALID_CREDENTIALS]:
+      'Incorrect username or password.',
 
     [ERROR_MESSAGES.AUTH.TOKEN_NOT_PROVIDED]:
       'Authentication token not provided.',
     [ERROR_MESSAGES.AUTH.TOKEN_INVALID]: 'Invalid authentication token.',
 
     [ERROR_MESSAGES.AUTH.USER_NOT_FOUND]: 'User not found.',
+
+    [ERROR_MESSAGES.TOO_MANY_REQUESTS]:
+      'Too many attempts. Please try again in a few minutes.',
 
     [ERROR_MESSAGES.UNKNOWN]:
       'An unknown error occurred. Please try again later.',

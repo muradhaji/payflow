@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { isValidObjectId } from 'mongoose';
 
 import { Installment } from '../models/installment.model';
 
@@ -241,6 +242,13 @@ export const checkInstallmentExists = async (
   next: NextFunction
 ): Promise<void> => {
   const { id } = req.params;
+
+  if (!isValidObjectId(id)) {
+    res
+      .status(404)
+      .json({ message: ERROR_MESSAGES.INSTALLMENT.INSTALLMENT_NOT_FOUND });
+    return;
+  }
 
   const installment = await Installment.findOne({
     _id: id,

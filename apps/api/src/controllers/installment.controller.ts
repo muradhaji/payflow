@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { isValidObjectId } from 'mongoose';
 import {
   IInstallment,
   Installment,
@@ -97,17 +98,22 @@ export const togglePaymentStatus = async (
 
     const responseInstallments: IInstallment[] = [];
 
-    const paymentsByInstallment = payments.reduce((acc, payment) => {
-      if (!acc[payment.installmentId]) {
-        acc[payment.installmentId] = [];
-      }
-      acc[payment.installmentId].push(payment.paymentId);
-      return acc;
-    }, {} as Record<string, string[]>);
+    const paymentsByInstallment = payments.reduce(
+      (acc, payment) => {
+        if (!acc[payment.installmentId]) {
+          acc[payment.installmentId] = [];
+        }
+        acc[payment.installmentId].push(payment.paymentId);
+        return acc;
+      },
+      {} as Record<string, string[]>
+    );
 
     for (const [installmentId, paymentIds] of Object.entries(
       paymentsByInstallment
     )) {
+      if (!isValidObjectId(installmentId)) continue;
+
       const installment = await Installment.findOne({
         _id: installmentId,
         user: req.user?._id,

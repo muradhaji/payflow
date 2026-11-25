@@ -20,7 +20,7 @@ const FilterHeader = ({ title, amount, type }: FilterHeaderProps) => {
   const color =
     type === 'remaining'
       ? themedColor('dark.5', 'gray.3')
-      : colorMap[type] ?? colorMap.default;
+      : (colorMap[type] ?? colorMap.default);
 
   return (
     <Card shadow='sm' radius='sm' withBorder mb='md' px='md' py='sm'>
