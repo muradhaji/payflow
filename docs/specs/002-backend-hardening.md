@@ -52,7 +52,7 @@ The API in production has known safety problems (details in [`archive/assessment
 - [x] T5 API + web: single `401 INVALID_CREDENTIALS` for login; new message in AZ and EN.
 - [x] T6 API + web: rate limit on login and sign-up with `trust proxy`; `429` message in AZ and EN.
 - [x] T7 API: CORS allowlist from `CORS_ORIGINS` plus the preview pattern; `helmet`; `.env.example` and `render.yaml` updated.
-- [ ] T8 Run every "Done when" check locally against `payflow-dev`.
+- [x] T8 Run every "Done when" check locally against `payflow-dev`.
 - [ ] T9 (Murad) Set `CORS_ORIGINS` and `CORS_ORIGIN_PATTERN` on Render (values from `render.yaml`), then merge; check the live API and run the smoke test.
 - [ ] T10 Update `product/auth.md` (US-AUTH-02, new US-AUTH-07, fixed bugs removed), `architecture.md` and `roadmap.md`; set status to `done`.
 - [x] T11 Swagger: use the relative server URL `/api`. Found during T3: Swagger still pointed to the deleted old Render service, so "Try it out" failed locally and in production.
