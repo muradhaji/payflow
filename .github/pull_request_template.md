@@ -2,7 +2,7 @@
 
 <!-- One or two sentences. -->
 
-**Spec:** <!-- e.g. 001, tasks T7–T9 -->
+**Spec:** <!-- e.g. [002/T4](https://github.com/muradhaji/payflow/blob/main/docs/specs/002-backend-hardening.md#tasks). Use full URLs here: relative links break in PR descriptions. -->
 
 ## How to check
 

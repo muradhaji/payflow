@@ -14,10 +14,13 @@
     "build": "nx run-many -t build",
     "lint": "nx run-many -t lint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "docs:links": "remark docs --use remark-validate-links --frail --quiet --no-stdout"
   },
   "devDependencies": {
     "nx": "24.0.6",
-    "prettier": "3.10.1"
+    "prettier": "3.10.1",
+    "remark-cli": "12.0.1",
+    "remark-validate-links": "13.1.0"
   }
 }

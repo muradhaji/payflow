@@ -1,6 +1,6 @@
 # Architecture
 
-_How PayFlow is built and deployed today. Updated: 2026-11-26 (end of spec 002). The pre-monorepo review is in [`archive/assessment-2026-11.md`](archive/assessment-2026-11.md)._
+_How PayFlow is built and deployed today. Updated: 2026-11-26 (end of [spec 002](specs/002-backend-hardening.md)). The pre-monorepo review is in [`archive/assessment-2026-11.md`](archive/assessment-2026-11.md)._
 
 ## What it does
 
@@ -20,7 +20,7 @@ render.yaml                 API deploy config
 .github/workflows/ci.yml    CI
 ```
 
-- **One lockfile** at the root. Direct dependencies are pinned to exact versions until spec 002 upgrades them.
+- **One lockfile** at the root. Dependencies use `^` ranges, updated within their major versions in [002/T2](specs/002-backend-hardening.md#tasks).
 - **Node 22**, pinned in `.nvmrc` and `engines`.
 - **Root scripts:** `npm run dev`, `npm run build` and `npm run lint` run across all apps.
 
@@ -97,20 +97,20 @@ Errors are returned as `{ message: ERROR_CODE }`. The web app translates the cod
 
 ## API safety (spec 002)
 
-- **Errors:** Express 5 passes errors from `async` handlers to one error handler (`middleware/error.middleware.ts`), which answers `500 UNKNOWN` and logs the error. A duplicate username at the database answers `400 USERNAME_EXISTS`. A request without a JSON body gets `req.body = {}`.
-- **Input guards:** username and password must be strings; invalid ids answer `404`.
-- **Login:** unknown user and wrong password both answer `401 INVALID_CREDENTIALS`.
-- **Rate limit:** login (failed attempts only) and sign-up (all attempts): 10 per IP in 15 minutes, then `429 TOO_MANY_REQUESTS`. Counts are kept in memory, which fits one server. `trust proxy` is set to 1 for Render's proxy.
-- **CORS:** browsers may call the API only from `CORS_ORIGINS` (exact origins), origins matching `CORS_ORIGIN_PATTERN` (Vercel previews), and the API's own origin (Swagger). Values are in `render.yaml`; local default is `http://localhost:5173`. How it works, with diagrams: [`cors.md`](cors.md).
-- **Headers:** `helmet` defaults (CSP, HSTS, `nosniff`, frame and referrer policies); no `X-Powered-By`.
+- **Errors** ([002/T3](specs/002-backend-hardening.md#tasks), [002/T4](specs/002-backend-hardening.md#tasks)): Express 5 passes errors from `async` handlers to one error handler (`middleware/error.middleware.ts`), which answers `500 UNKNOWN` and logs the error. A duplicate username at the database answers `400 USERNAME_EXISTS`. A request without a JSON body gets `req.body = {}`.
+- **Input guards** ([002/T4](specs/002-backend-hardening.md#tasks)): username and password must be strings; invalid ids answer `404`.
+- **Login** ([002/T5](specs/002-backend-hardening.md#tasks)): unknown user and wrong password both answer `401 INVALID_CREDENTIALS`.
+- **Rate limit** ([002/T6](specs/002-backend-hardening.md#tasks)): login (failed attempts only) and sign-up (all attempts): 10 per IP in 15 minutes, then `429 TOO_MANY_REQUESTS`. Counts are kept in memory, which fits one server. `trust proxy` is set to 1 for Render's proxy.
+- **CORS** ([002/T7](specs/002-backend-hardening.md#tasks)): browsers may call the API only from `CORS_ORIGINS` (exact origins), origins matching `CORS_ORIGIN_PATTERN` (Vercel previews), and the API's own origin (Swagger). Values are in `render.yaml`; local default is `http://localhost:5173`. How it works, with diagrams: [`cors.md`](cors.md).
+- **Headers** ([002/T7](specs/002-backend-hardening.md#tasks)): `helmet` defaults (CSP, HSTS, `nosniff`, frame and referrer policies); no `X-Powered-By`.
 
 ## Known issues
 
-Still open (details in the assessment; the roadmap says which spec addresses each):
+Still open (details in the [assessment findings](archive/assessment-2026-11.md#4-findings); the [roadmap](roadmap.md) says which spec addresses each):
 
-- H2/H3: payment state is client-controlled, and toggling it is not idempotent.
-- M1/M2: dates and money representation.
+- [H2/H3](archive/assessment-2026-11.md#4-findings): payment state is client-controlled, and toggling it is not idempotent.
+- [M1/M2](archive/assessment-2026-11.md#4-findings): dates and money representation.
 - `npm audit`: 4 moderate findings in `i18next` and `swagger-jsdoc` (and their dependencies); fixes need major upgrades.
 - Atlas Network Access allows all IP addresses (`0.0.0.0/0`), because local development runs from changing IPs. The database users' passwords are the only protection; keep them strong and limited to their own database.
 
-Fixed in spec 002: C1 (crash on async errors), H1 (critical/high dependencies), H4 (no login limit, username leak), M6 (open CORS, no security headers), no shared formatting.
+Fixed in [spec 002](specs/002-backend-hardening.md): [C1, H1, H4, M6](archive/assessment-2026-11.md#4-findings) (crash on async errors, critical/high dependencies, no login limit and username leak, open CORS and no security headers), and no shared formatting.

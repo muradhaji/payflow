@@ -26,7 +26,7 @@ As a user, I can open an installment and see everything about it.
 As a user, I can change an installment's title, total amount and number of months.
 - The start date cannot be changed.
 - Paid payments are locked: their date and amount cannot be changed.
-- Changing the total or the number of months rebuilds the **unpaid** payments: the remaining amount is split evenly over the remaining months, using the same rounding as US-INST-01.
+- Changing the total or the number of months rebuilds the **unpaid** payments: the remaining amount is split evenly over the remaining months, using the same rounding as [US-INST-01](installments.md#us-inst-01-add-an-installment).
 - The number of months cannot be lower than the number of paid payments.
 - **(bug)** The rebuild assumes the paid payments are the earliest months. If a later month was paid first, the rebuilt dates shift or overlap.
 - **(bug)** Saving replaces the whole schedule. Unpaid payments get new IDs, and the server accepts whatever paid status and paid date the app sends.

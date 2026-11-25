@@ -13,7 +13,7 @@ As a user, I can log in with my username and password.
 - On success I am taken to **Payments**.
 - If I am already logged in and open `/login`, I am sent to **Payments**.
 - The form uses the same field rules as sign-up, so even a wrong password must meet the password rules.
-- An unknown username and a wrong password show the same message, "Incorrect username or password.", so the page does not reveal which usernames exist. *(Changed in 002.)*
+- An unknown username and a wrong password show the same message, "Incorrect username or password.", so the page does not reveal which usernames exist. *(Changed in [002/T5](../specs/002-backend-hardening.md#tasks).)*
 
 ## US-AUTH-03 Stay logged in
 As a user, I stay logged in after closing the browser, for **30 days**.
@@ -36,7 +36,7 @@ As a visitor, I cannot see payment pages without logging in.
 - **(bug)** A logged-in user can still open `/signup`, and the home page **Get started** button always goes there.
 
 ## US-AUTH-07 Protection against password guessing
-As a user, my account is protected from someone trying many passwords. *(Added in 002.)*
+As a user, my account is protected from someone trying many passwords. *(Added in [002/T6](../specs/002-backend-hardening.md#tasks).)*
 - After **10 failed logins** from one internet address within **15 minutes**, further login attempts from that address are refused for the rest of the 15 minutes, and the page shows "Too many attempts. Please try again in a few minutes."
 - Successful logins do not count, so normal use is never blocked.
 - Sign-up has the same limit, counting every attempt, to slow down mass account creation.
