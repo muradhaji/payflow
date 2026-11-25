@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
 import installmentRoutes from './routes/installment.routes';
 import cors from 'cors';
+import helmet from 'helmet';
 import connectDB from './config/db';
+import { corsOptions } from './config/cors';
 import { setupSwagger } from './swagger';
 import { errorHandler } from './middleware/error.middleware';
 
@@ -14,7 +16,9 @@ const app = express();
 // Render puts one proxy in front of the API; without this, every user
 // would share the proxy's IP address and one rate limit.
 app.set('trust proxy', 1);
-app.use(cors());
+// Standard security headers; also removes X-Powered-By.
+app.use(helmet());
+app.use(cors(corsOptions));
 app.use(express.json());
 // Express 5 leaves req.body undefined when there is no JSON body; the
 // validators expect an object (as in Express 4), so they can answer 400.

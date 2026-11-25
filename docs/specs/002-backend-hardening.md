@@ -39,9 +39,9 @@ The API in production has known safety problems (details in [`archive/assessment
 - **Input guards:** `username` and `password` must be strings (`400 USERNAME_INVALID` / `PASSWORD_INVALID`). Invalid ObjectIds answer `404`. A duplicate-key error from MongoDB answers `400 USERNAME_EXISTS`. Express 5 leaves `req.body` undefined when a request has no JSON body; one middleware sets it to `{}` again, so validators answer `400` instead of failing. Full validation with schemas comes in 004.
 - **Login:** one error code `INVALID_CREDENTIALS` (`401`) for unknown user and wrong password. The web app gets the new message in AZ and EN.
 - **Rate limit:** `express-rate-limit` on `/api/auth/login` and `/api/auth/signup`: 10 requests per 15 minutes per IP, answering `429 TOO_MANY_REQUESTS`. `app.set('trust proxy', 1)`, because Render sits in front of the API and otherwise every user looks like the same IP.
-- **CORS:** allowed origins come from a `CORS_ORIGINS` environment variable (comma-separated), plus a pattern for Vercel preview URLs of this project. Local default: `http://localhost:5173`.
+- **CORS:** allowed origins come from `CORS_ORIGINS` (exact origins, comma-separated) and `CORS_ORIGIN_PATTERN` (a regex for this project's Vercel preview URLs). The API's own origin is always allowed, so Swagger keeps working. Local default: `http://localhost:5173`. Both values are not secret and live in `render.yaml`.
 - **Headers:** `helmet` with its defaults, which also removes `X-Powered-By`. The Swagger page at `/api-docs` must keep working.
-- **Deploy:** merging to `main` deploys the API through Render after CI passes. `CORS_ORIGINS` must be set on Render **before** that merge, or the live site loses access to the API.
+- **Deploy:** merging to `main` deploys the API through Render after CI passes. `CORS_ORIGINS` and `CORS_ORIGIN_PATTERN` must be set on the Render service **before** that merge, or the live site loses access to the API. Setting them by hand first is safest; `render.yaml` holds the same values.
 - **Rollback:** in Render, redeploy the previous deploy; in GitHub, revert the merge.
 
 ## Tasks
@@ -51,8 +51,8 @@ The API in production has known safety problems (details in [`archive/assessment
 - [x] T4 API: string checks for username and password, `404` for invalid ids, `400 USERNAME_EXISTS` on duplicate key, empty `req.body` defaults to `{}`.
 - [x] T5 API + web: single `401 INVALID_CREDENTIALS` for login; new message in AZ and EN.
 - [x] T6 API + web: rate limit on login and sign-up with `trust proxy`; `429` message in AZ and EN.
-- [ ] T7 API: CORS allowlist from `CORS_ORIGINS` plus the preview pattern; `helmet`; `.env.example` and `render.yaml` updated.
+- [x] T7 API: CORS allowlist from `CORS_ORIGINS` plus the preview pattern; `helmet`; `.env.example` and `render.yaml` updated.
 - [ ] T8 Run every "Done when" check locally against `payflow-dev`.
-- [ ] T9 (Murad) Set `CORS_ORIGINS` on Render, then merge; check the live API and run the smoke test.
+- [ ] T9 (Murad) Set `CORS_ORIGINS` and `CORS_ORIGIN_PATTERN` on Render (values from `render.yaml`), then merge; check the live API and run the smoke test.
 - [ ] T10 Update `product/auth.md` (US-AUTH-02, new US-AUTH-07, fixed bugs removed), `architecture.md` and `roadmap.md`; set status to `done`.
 - [x] T11 Swagger: use the relative server URL `/api`. Found during T3: Swagger still pointed to the deleted old Render service, so "Try it out" failed locally and in production.

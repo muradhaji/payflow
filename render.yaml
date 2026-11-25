@@ -29,6 +29,11 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
+      # Websites allowed to call the API from a browser (not secret).
+      - key: CORS_ORIGINS
+        value: 'https://payflow-live.vercel.app'
+      - key: CORS_ORIGIN_PATTERN
+        value: '^https://payflow(-[a-z0-9]+)+-murads-projects-644222af\.vercel\.app$'
       - key: NX_DAEMON
         value: 'false'
       - key: NX_NO_CLOUD
