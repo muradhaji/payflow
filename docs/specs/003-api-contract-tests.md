@@ -1,6 +1,6 @@
 # 003 — API contract tests
 
-**Status:** in progress · **Goal:** G2 · **Affects:** api (startup split, tests), infra (CI, Atlas test user), tooling · **Stories:** none (no behavior change)
+**Status:** done (2026-11-27) · **Goal:** G2 · **Affects:** api (startup split, tests), infra (CI, Atlas test user), tooling · **Stories:** none (no behavior change)
 
 ## Why
 - **Every API check is manual today.** [Spec 002](002-backend-hardening.md) was verified with hand-written `curl` scripts, and several script bugs looked like app failures at first (see its Retro).
@@ -16,12 +16,12 @@
 **Not included:** web app tests, end-to-end browser tests, load tests, test coverage targets, fixing the bugs the tests may find (each found bug is noted in [`architecture.md`](../architecture.md#known-issues) and goes to the spec that owns it).
 
 ## Done when
-1. `npx nx test @payflow/api` passes locally against `payflow-test`.
-2. Every route in [`auth.routes.ts`](../../apps/api/src/routes/auth.routes.ts) and [`installment.routes.ts`](../../apps/api/src/routes/installment.routes.ts) has tests for: success (status and response shape), missing or invalid token (protected routes), and its main `400`/`404` errors.
-3. The [spec 002 "Done when"](002-backend-hardening.md#done-when) checks 1, 3, 4 and 5 (crash inputs, `INVALID_CREDENTIALS`, rate limit, CORS and headers) are automated tests.
-4. Pointed at any database other than `payflow-test`, the tests stop before sending a request, with a clear message.
-5. A full run leaves no test users or installments behind.
-6. A pull request with a deliberately broken API response fails CI, and the merge is blocked. Then the change is reverted.
+1. ✅ `npx nx test @payflow/api` passes locally against `payflow-test`.
+2. ✅ Every route in [`auth.routes.ts`](../../apps/api/src/routes/auth.routes.ts) and [`installment.routes.ts`](../../apps/api/src/routes/installment.routes.ts) has tests for: success (status and response shape), missing or invalid token (protected routes), and its main `400`/`404` errors. (132 tests in 9 files.)
+3. ✅ The [spec 002 "Done when"](002-backend-hardening.md#done-when) checks 1, 3, 4 and 5 (crash inputs, `INVALID_CREDENTIALS`, rate limit, CORS and headers) are automated tests.
+4. ✅ Pointed at any database other than `payflow-test`, the tests stop before sending a request, with a clear message.
+5. ✅ A full run leaves no test users or installments behind.
+6. ✅ A pull request with a deliberately broken API response fails CI, and the merge is blocked. Then the change is reverted. ([Throwaway PR #28](https://github.com/muradhaji/payflow/pull/28): 131 passed, 1 failed, merge blocked; closed unmerged.)
 
 ## How
 - **Tools:** [Vitest](https://vitest.dev/) runs the tests (TypeScript works without extra setup) and [supertest](https://github.com/ladjs/supertest) sends requests to the app in memory, without opening a port. Both are dev dependencies of `@payflow/api`. Nx picks up the new `test` script as a target, so `nx affected -t test` works. The `test` target is **not cached**: its result depends on the database, not only on the files.
@@ -48,4 +48,25 @@
 - [x] T7 Tests: payment toggle, current behavior, marked for [005](../roadmap.md).
 - [x] T8 Tests: crash inputs, rate limit (own file), CORS and security headers.
 - [x] T9 CI: run `test` in `lint-and-build` with the `MONGO_URI_TEST` secret; prove a broken response blocks the merge.
-- [ ] T10 Update [`architecture.md`](../architecture.md) (tests, `payflow-test`, Known issues for any bug found) and `roadmap.md`; set status to `done`.
+- [x] T10 Update [`architecture.md`](../architecture.md) (tests, `payflow-test`, Known issues for any bug found) and `roadmap.md`; set status to `done`.
+
+## Retro
+
+**Went well**
+- Every test file was checked by breaking the code on purpose for one run (login message, missing `protect`, owner filter, toggle, helmet, `render.yaml` pattern, rate limit) and seeing the right tests fail.
+- A separate database and a `payflow-ci` user limited to it made the CI secret harmless: it cannot read `payflow-dev` or `payflow-prod`.
+- The tests found two bugs on their first run (a `null` monthly payment and a `null` toggle item answer `500`). Both are pinned and listed in [Known issues](../architecture.md#known-issues) for [004](../roadmap.md) and [005](../roadmap.md).
+- The CORS tests read `render.yaml`, so the production settings are tested, not a copy of them.
+
+**Surprises**
+- Usernames allow only lowercase letters and digits; the first test-user example in this spec was wrong.
+- The first `payflow-ci` password did not match Atlas ("bad auth"); setting it again fixed it.
+- The local `apps/api/.env` had `PORT=5000`, which macOS uses for AirPlay; it is now 5050, as in `.env.example`.
+- The in-memory rate limits shaped the test files: one file per route, and the limits tested in their own file.
+- `nx affected` does not count `ci.yml` as part of any app, so the T9 PR itself ran no tests; a throwaway PR was needed for the proof.
+- The API has no lint setup at all; `nx affected -t lint` only ever checked the web app.
+
+**Next time**
+- [004](../roadmap.md) and [005](../roadmap.md) start by changing the "known bug" and toggle tests on purpose, then the code.
+- New API tests follow the rules in [`architecture.md`](../architecture.md#api-tests-spec-003) (plain-string error codes, request budgets per file).
+- Next on the roadmap: split CI into parallel jobs behind one gate check.
