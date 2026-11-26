@@ -40,8 +40,8 @@
 
 ## Tasks
 - [x] T1 API: split `src/index.ts` into `src/app.ts` and `src/index.ts`, no behavior change. Build, lint and the local round trip pass.
-- [ ] T2 (Murad) Atlas: create the user `payflow-ci` with `readWrite` on `payflow-test`. Put its connection string in `apps/api/.env` as `MONGO_URI_TEST` and in GitHub (Settings → Secrets → Actions) as `MONGO_URI_TEST`.
-- [ ] T3 API: add Vitest and supertest, the `test` script (not cached in Nx), the test setup (connect with `MONGO_URI_TEST`, database-name guard, random `JWT_SECRET`, user helpers), and `MONGO_URI_TEST` in `.env.example`.
+- [x] T2 (Murad) Atlas: create the user `payflow-ci` with `readWrite` on `payflow-test`. Put its connection string in `apps/api/.env` as `MONGO_URI_TEST` and in GitHub (Settings → Secrets → Actions) as `MONGO_URI_TEST`.
+- [x] T3 API: add Vitest and supertest, the `test` script (not cached in Nx), the test setup (connect with `MONGO_URI_TEST`, database-name guard, random `JWT_SECRET`, user helpers), and `MONGO_URI_TEST` in `.env.example`.
 - [ ] T4 Tests: sign-up, login and delete account, including `INVALID_CREDENTIALS` and the input guards.
 - [ ] T5 Tests: protected routes without a token, with an invalid token, and with the token of a deleted user.
 - [ ] T6 Tests: create, list, get, update and delete installments, including validation errors, invalid IDs and another user's installment (`404`).
