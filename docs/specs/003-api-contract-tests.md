@@ -44,7 +44,7 @@
 - [x] T3 API: add Vitest and supertest, the `test` script (not cached in Nx), the test setup (connect with `MONGO_URI_TEST`, database-name guard, random `JWT_SECRET`, user helpers), and `MONGO_URI_TEST` in `.env.example`.
 - [x] T4 Tests: sign-up, login and delete account, including `INVALID_CREDENTIALS` and the input guards.
 - [x] T5 Tests: protected routes without a token, with an invalid token, and with the token of a deleted user.
-- [ ] T6 Tests: create, list, get, update and delete installments, including validation errors, invalid IDs and another user's installment (`404`).
+- [x] T6 Tests: create, list, get, update and delete installments, including validation errors, invalid IDs and another user's installment (`404`).
 - [ ] T7 Tests: payment toggle, current behavior, marked for [005](../roadmap.md).
 - [ ] T8 Tests: crash inputs, rate limit (own file), CORS and security headers.
 - [ ] T9 CI: run `test` in `lint-and-build` with the `MONGO_URI_TEST` secret; prove a broken response blocks the merge.
