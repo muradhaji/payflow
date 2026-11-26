@@ -46,6 +46,6 @@
 - [x] T5 Tests: protected routes without a token, with an invalid token, and with the token of a deleted user.
 - [x] T6 Tests: create, list, get, update and delete installments, including validation errors, invalid IDs and another user's installment (`404`).
 - [x] T7 Tests: payment toggle, current behavior, marked for [005](../roadmap.md).
-- [ ] T8 Tests: crash inputs, rate limit (own file), CORS and security headers.
+- [x] T8 Tests: crash inputs, rate limit (own file), CORS and security headers.
 - [ ] T9 CI: run `test` in `lint-and-build` with the `MONGO_URI_TEST` secret; prove a broken response blocks the merge.
 - [ ] T10 Update [`architecture.md`](../architecture.md) (tests, `payflow-test`, Known issues for any bug found) and `roadmap.md`; set status to `done`.
