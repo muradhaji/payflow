@@ -108,7 +108,7 @@ Errors are returned as `{ message: ERROR_CODE }`. The web app translates the cod
 
 Still open (details in the [assessment findings](archive/assessment-2026-11.md#4-findings); the [roadmap](roadmap.md) says which spec addresses each):
 
-- [H2/H3](archive/assessment-2026-11.md#4-findings): payment state is client-controlled, and toggling it is not idempotent.
+- [H2/H3](archive/assessment-2026-11.md#4-findings): payment state is client-controlled, and toggling it is not idempotent. Also, a `null` item in the toggle request answers `500 UNKNOWN` instead of `400` (found in [003/T7](specs/003-api-contract-tests.md#tasks)). [005](roadmap.md) reworks this route.
 - [M1/M2](archive/assessment-2026-11.md#4-findings): dates and money representation.
 - Creating or updating an installment with a monthly payment that is not an object (e.g. `null`) answers `500 UNKNOWN` instead of `400`; the API keeps running. Found by the tests in [003/T6](specs/003-api-contract-tests.md#tasks); the shared schemas in [004](roadmap.md) fix it.
 - `npm audit`: 4 moderate findings in `i18next` and `swagger-jsdoc` (and their dependencies); fixes need major upgrades.
