@@ -34,4 +34,8 @@ jobs:
 
       - uses: nrwl/nx-set-shas@v5
 
-      - run: npx nx affected -t lint build
+      - run: npx nx affected -t lint build test
+        env:
+          # API contract tests (spec 003): the payflow-ci user, which can
+          # access only the payflow-test database.
+          MONGO_URI_TEST: ${{ secrets.MONGO_URI_TEST }}
