@@ -110,6 +110,7 @@ Still open (details in the [assessment findings](archive/assessment-2026-11.md#4
 
 - [H2/H3](archive/assessment-2026-11.md#4-findings): payment state is client-controlled, and toggling it is not idempotent.
 - [M1/M2](archive/assessment-2026-11.md#4-findings): dates and money representation.
+- Creating or updating an installment with a monthly payment that is not an object (e.g. `null`) answers `500 UNKNOWN` instead of `400`; the API keeps running. Found by the tests in [003/T6](specs/003-api-contract-tests.md#tasks); the shared schemas in [004](roadmap.md) fix it.
 - `npm audit`: 4 moderate findings in `i18next` and `swagger-jsdoc` (and their dependencies); fixes need major upgrades.
 - **Atlas Network Access allows all IP addresses (`0.0.0.0/0`).** Three things connect from changing IPs: local development, GitHub Actions runners (the API tests from [spec 003](specs/003-api-contract-tests.md)), and Render (the free plan has no single fixed outbound IP). The protection today is the database users: password, TLS, and each user limited to its own database. Ways to close it later:
   1. **Allow the runner's IP only during CI:** a CI step adds the runner's IP through the Atlas Admin API before the tests and removes it afterwards. Needs an Atlas API key as a second GitHub secret. Works on the free cluster. Best fit for PayFlow.
