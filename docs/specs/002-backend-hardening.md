@@ -17,7 +17,7 @@ The API in production has known safety problems (details in the [assessment find
 - Only PayFlow's own web addresses (production, previews, localhost) may call the API, and responses carry standard security headers.
 - One Prettier config for the repo, matching today's style (single quotes), checked in CI.
 
-**Not included:** shared schemas and full validation ([004](../roadmap.md)), payment toggle fix ([005](../roadmap.md)), dates and money ([006](../roadmap.md)), tests ([003](../roadmap.md)), staging.
+**Not included:** shared schemas and full validation ([004](../roadmap.md)), payment toggle fix ([005](../roadmap.md)), dates and money ([006](../roadmap.md)), tests ([003](003-api-contract-tests.md)), staging.
 
 ## Done when
 1. ✅ These requests get an error response and the API keeps running:
@@ -71,5 +71,5 @@ The API in production has known safety problems (details in the [assessment find
 - Several test-script bugs (a `wait` that waited for the server, shell quoting, a function named like the `code` command) looked like app failures at first.
 
 **Next time**
-- Spec [003](../roadmap.md) (API contract tests) runs against the Atlas `payflow-dev` database, as in 002. If Atlas refuses a connection, check the access list first (Murad fixes it); don't treat it as a test failure.
+- Spec [003](003-api-contract-tests.md) (API contract tests) runs against the Atlas `payflow-dev` database, as in 002. If Atlas refuses a connection, check the access list first (Murad fixes it); don't treat it as a test failure.
 - Test scripts: cap every wait, build JSON bodies in variables, and check the database connection before trusting a failure.

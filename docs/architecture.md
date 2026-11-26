@@ -111,6 +111,11 @@ Still open (details in the [assessment findings](archive/assessment-2026-11.md#4
 - [H2/H3](archive/assessment-2026-11.md#4-findings): payment state is client-controlled, and toggling it is not idempotent.
 - [M1/M2](archive/assessment-2026-11.md#4-findings): dates and money representation.
 - `npm audit`: 4 moderate findings in `i18next` and `swagger-jsdoc` (and their dependencies); fixes need major upgrades.
-- Atlas Network Access allows all IP addresses (`0.0.0.0/0`), because local development runs from changing IPs. The database users' passwords are the only protection; keep them strong and limited to their own database.
+- **Atlas Network Access allows all IP addresses (`0.0.0.0/0`).** Three things connect from changing IPs: local development, GitHub Actions runners (the API tests from [spec 003](specs/003-api-contract-tests.md)), and Render (the free plan has no single fixed outbound IP). The protection today is the database users: password, TLS, and each user limited to its own database. Ways to close it later:
+  1. **Allow the runner's IP only during CI:** a CI step adds the runner's IP through the Atlas Admin API before the tests and removes it afterwards. Needs an Atlas API key as a second GitHub secret. Works on the free cluster. Best fit for PayFlow.
+  2. **Self-hosted runner** with a fixed IP: allow only that IP. Costs a machine to maintain.
+  3. **GitHub larger runners with static IPs:** allow their IP range. Paid.
+
+  Any of these goes together with allowing only Render's published outbound IP ranges for production, and the developer's current IP (the Atlas "Add current IP address" button) for local development.
 
 Fixed in [spec 002](specs/002-backend-hardening.md): [C1, H1, H4, M6](archive/assessment-2026-11.md#4-findings) (crash on async errors, critical/high dependencies, no login limit and username leak, open CORS and no security headers), and no shared formatting.
