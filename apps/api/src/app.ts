@@ -9,7 +9,7 @@ import { errorHandler } from './middleware/error.middleware';
 
 // Builds the Express app without connecting to the database or opening a
 // port, so tests can send requests to it directly (index.ts starts it).
-const app = express();
+const   app = express( );
 // Render puts one proxy in front of the API; without this, every user
 // would share the proxy's IP address and one rate limit.
 app.set('trust proxy', 1);
