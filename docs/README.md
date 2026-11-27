@@ -34,7 +34,7 @@
   Inside a spec, its own tasks need no link. In PR descriptions use full GitHub URLs (`https://github.com/muradhaji/payflow/blob/main/docs/…`), because relative links don't work there. CI checks every link and anchor (see [Automation](#automation)).
 - **Spec status:** `draft` → `approved` → `in progress` → `done` (or `dropped`).
 - **Size:** a spec has at most about 15 tasks. If it needs more, split it.
-- **Branches:** `NNN/short-name`, or `docs/short-name` for docs-only fixes.
+- **Branches:** `NNN/short-name`, `docs/short-name` for docs-only fixes, or `ci/short-name` for CI changes outside a spec.
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `ci:`).
 
 ## Automation
@@ -42,6 +42,6 @@
 These rules are enforced by GitHub, not by memory:
 
 - `main` is protected: no direct pushes, no force pushes, no deletion. Changes arrive only by pull request.
-- Pull requests can be merged only when the required CI checks pass (lint and build for the affected apps; added in [spec 001](specs/001-nx-migration.md)).
+- Pull requests can be merged only when the required check `ci-ok` passes: formatting, doc links, and lint, build and tests for the affected apps (CI added in [spec 001](specs/001-nx-migration.md); jobs in [`architecture.md`](architecture.md#ci-and-branch-rules)).
 - Every pull request starts from the [PR template](../.github/pull_request_template.md), which asks for the spec and task IDs.
 - CI runs `npm run docs:links` ([remark-validate-links](https://github.com/remarkjs/remark-validate-links)): a pull request fails if a link in `docs/` points to a missing file or heading. It does **not** know when a planned spec gets written; that step is manual (see [How we work](#how-we-work), step 2).
