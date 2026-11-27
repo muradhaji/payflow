@@ -13,8 +13,48 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Three jobs run in parallel; ci-ok waits for all of them. Only ci-ok is a
+# required check in the ruleset, so jobs can be added or renamed here
+# without changing the ruleset.
 jobs:
-  lint-and-build:
+  # Formatting and documentation links (whole repo, every time).
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run format:check
+
+      - run: npm run docs:links
+
+  # Lint and build the apps a change affects.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # nx affected compares with the last green main
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - uses: nrwl/nx-set-shas@v5
+
+      - run: npx nx affected -t lint build
+
+  # Tests of the apps a change affects (today: the API contract tests).
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -28,14 +68,29 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run format:check
-
-      - run: npm run docs:links
-
       - uses: nrwl/nx-set-shas@v5
 
-      - run: npx nx affected -t lint build test
+      - run: npx nx affected -t test
         env:
           # API contract tests (spec 003): the payflow-ci user, which can
-          # access only the payflow-test database.
+          # access only the payflow-test database. Only this job gets it.
           MONGO_URI_TEST: ${{ secrets.MONGO_URI_TEST }}
+
+  # The one required check. always() makes it run even when a job above
+  # failed; otherwise GitHub would skip it, and a skipped required check
+  # can count as passing.
+  ci-ok:
+    needs: [quality, build, test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          echo "quality, build, test: $RESULTS"
+          for result in $RESULTS; do
+            if [ "$result" != "success" ]; then
+              echo "A required job did not succeed."
+              exit 1
+            fi
+          done

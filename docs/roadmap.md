@@ -9,7 +9,7 @@ Goals run in order: **G1**, then **G2**, then **G3**.
 | [002](specs/002-backend-hardening.md) | Backend hardening: crash fix, dependency updates, rate limiting, CORS, shared Prettier config | G2 Backend | done |
 | – | *Optional:* evaluate moving the API from Render to Vercel (serverless). Gains per-PR API previews and no 60 s wake-up; costs a startup rework (reuse the database connection; the app is already exported since [003/T1](specs/003-api-contract-tests.md#tasks), bundle `src/routes` for Swagger) and a shared rate-limit store. May be skipped. | G2 Backend | optional |
 | [003](specs/003-api-contract-tests.md) | API contract tests | G2 Backend | done |
-| – | CI: split the single `lint-and-build` job into parallel jobs (quality, build, test) behind one required gate check `ci-ok`, and update the ruleset | G2 Backend | next |
+| – | CI: split the single `lint-and-build` job into parallel jobs (quality, build, test) behind one required gate check `ci-ok`, and update the ruleset | G2 Backend | in progress |
 | 004 | Shared schemas (Zod) for validation and types, used by web and API | G2 Backend | planned |
 | 005 | Payment state integrity: server-owned paid state, safe updates | G2 Backend | planned |
 | 006 | Dates and money representation | G2 Backend | planned |
