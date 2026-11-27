@@ -53,12 +53,7 @@ render.yaml                 API deploy config
 
 ## CI and branch rules
 
-- **CI** (GitHub Actions, [`ci.yml`](../.github/workflows/ci.yml)), on every PR and push to `main`, runs three jobs in parallel:
-  - `quality`: `npm run format:check` (Prettier) and `npm run docs:links` (links and anchors in `docs/`);
-  - `build`: `npx nx affected -t lint build`;
-  - `test`: `npx nx affected -t test`, the only job with the `MONGO_URI_TEST` secret.
-
-  `nx affected` checks only the apps a change touches. A fourth job, `ci-ok`, waits for the three and fails unless all of them succeeded; it is the only required check, so jobs can change without touching the ruleset.
+- **CI** (GitHub Actions, [`ci.yml`](../.github/workflows/ci.yml)): on every PR and push to `main`, three jobs run in parallel: `quality` (format and doc links), `build` (lint and build) and `test` (API tests), for the apps a change affects. A gate job, `ci-ok`, passes only if all three succeeded. How it works, with diagrams: [`ci.md`](ci.md).
 - **Formatting:** Prettier with `.prettierrc.json` (single quotes, trailing commas "es5"). Markdown is not formatted. Editors with a Prettier extension pick up the config automatically.
 - **`main` is protected** (ruleset `protect-main`): changes only via pull request, `ci-ok` must pass on an up-to-date branch, no force push, no deletion. The owner merges.
 

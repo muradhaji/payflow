@@ -1,3 +1,4 @@
+# How this works, with diagrams: docs/ci.md. Update it when you change the jobs.
 name: CI
 
 on:
