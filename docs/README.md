@@ -7,6 +7,7 @@
 | [`specs/`](specs/) | One file per change: what, why, how and the task checklist. |
 | [`architecture.md`](architecture.md) | Stack, apps, hosting. |
 | [`cors.md`](cors.md) | Which websites may call the API, with diagrams. |
+| [`ci.md`](ci.md) | What CI checks before a merge, with diagrams. |
 | [`smoke-test.md`](smoke-test.md) | 10-step manual check after a deploy. |
 | [`archive/`](archive/) | Old documents kept as history. |
 
@@ -42,6 +43,6 @@
 These rules are enforced by GitHub, not by memory:
 
 - `main` is protected: no direct pushes, no force pushes, no deletion. Changes arrive only by pull request.
-- Pull requests can be merged only when the required check `ci-ok` passes: formatting, doc links, and lint, build and tests for the affected apps (CI added in [spec 001](specs/001-nx-migration.md); jobs in [`architecture.md`](architecture.md#ci-and-branch-rules)).
+- Pull requests can be merged only when the required check `ci-ok` passes: formatting, doc links, and lint, build and tests for the affected apps (CI added in [spec 001](specs/001-nx-migration.md); how it works: [`ci.md`](ci.md)).
 - Every pull request starts from the [PR template](../.github/pull_request_template.md), which asks for the spec and task IDs.
 - CI runs `npm run docs:links` ([remark-validate-links](https://github.com/remarkjs/remark-validate-links)): a pull request fails if a link in `docs/` points to a missing file or heading. It does **not** know when a planned spec gets written; that step is manual (see [How we work](#how-we-work), step 2).
