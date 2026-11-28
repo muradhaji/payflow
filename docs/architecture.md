@@ -127,7 +127,7 @@ Still open (details in the [assessment findings](archive/assessment-2026-11.md#4
 
 - [H2/H3](archive/assessment-2026-11.md#4-findings): payment state is client-controlled, and toggling it is not idempotent. Also, a `null` item in the toggle request answers `500 UNKNOWN` instead of `400` (found in [003/T7](specs/003-api-contract-tests.md#tasks)). [005](roadmap.md) reworks this route.
 - [M1/M2](archive/assessment-2026-11.md#4-findings): dates and money representation.
-- Creating or updating an installment with a monthly payment that is not an object (e.g. `null`) answers `500 UNKNOWN` instead of `400`; the API keeps running. Found by the tests in [003/T6](specs/003-api-contract-tests.md#tasks); the shared schemas in [004](roadmap.md) fix it.
+- Creating or updating an installment with a monthly payment that is not an object (e.g. `null`) answers `500 UNKNOWN` instead of `400`; the API keeps running. Found by the tests in [003/T6](specs/003-api-contract-tests.md#tasks); the shared schemas in [004](specs/004-shared-schemas.md) fix it.
 - The API has no lint setup (no ESLint config or `lint` script), so `nx affected -t lint` checks only the web app.
 - `npm audit`: 4 moderate findings in `i18next` and `swagger-jsdoc` (and their dependencies); fixes need major upgrades.
 - **Atlas Network Access allows all IP addresses (`0.0.0.0/0`).** Three things connect from changing IPs: local development, GitHub Actions runners (the API tests from [spec 003](specs/003-api-contract-tests.md)), and Render (the free plan has no single fixed outbound IP). The protection today is the database users: password, TLS, and each user limited to its own database. Ways to close it later:

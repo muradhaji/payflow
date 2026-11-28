@@ -17,7 +17,7 @@ The API in production has known safety problems (details in the [assessment find
 - Only PayFlow's own web addresses (production, previews, localhost) may call the API, and responses carry standard security headers.
 - One Prettier config for the repo, matching today's style (single quotes), checked in CI.
 
-**Not included:** shared schemas and full validation ([004](../roadmap.md)), payment toggle fix ([005](../roadmap.md)), dates and money ([006](../roadmap.md)), tests ([003](003-api-contract-tests.md)), staging.
+**Not included:** shared schemas and full validation ([004](004-shared-schemas.md)), payment toggle fix ([005](../roadmap.md)), dates and money ([006](../roadmap.md)), tests ([003](003-api-contract-tests.md)), staging.
 
 ## Done when
 1. ✅ These requests get an error response and the API keeps running:
@@ -36,7 +36,7 @@ The API in production has known safety problems (details in the [assessment find
 - **Prettier:** a root `.prettierrc` that matches the current code (single quotes, semicolons, 2 spaces), `.prettierignore` for build output, and `format`/`format:check` scripts. If the existing code doesn't fully match, one separate "format only" commit.
 - **Dependencies:** `npm update` within major versions for both apps, then exact pins replaced by `^` ranges again. Build, lint and the local round trip must still pass.
 - **Crash fix with Express 5:** upgrade `express` from 4 to 5. Express 5 passes errors from `async` handlers to the error middleware by itself, so no wrapper is needed on any route. One error-handling middleware at the end logs the error and answers `500 UNKNOWN`. This was first done with an `asyncHandler` wrapper on every route; it was replaced because each new route would need it, and forgetting it brings the crash back. The routes use no Express features that changed in version 5, and `@types/express` is already version 5.
-- **Input guards:** `username` and `password` must be strings (`400 USERNAME_INVALID` / `PASSWORD_INVALID`). Invalid ObjectIds answer `404`. A duplicate-key error from MongoDB answers `400 USERNAME_EXISTS`. Express 5 leaves `req.body` undefined when a request has no JSON body; one middleware sets it to `{}` again, so validators answer `400` instead of failing. Full validation with schemas comes in [004](../roadmap.md).
+- **Input guards:** `username` and `password` must be strings (`400 USERNAME_INVALID` / `PASSWORD_INVALID`). Invalid ObjectIds answer `404`. A duplicate-key error from MongoDB answers `400 USERNAME_EXISTS`. Express 5 leaves `req.body` undefined when a request has no JSON body; one middleware sets it to `{}` again, so validators answer `400` instead of failing. Full validation with schemas comes in [004](004-shared-schemas.md).
 - **Login:** one error code `INVALID_CREDENTIALS` (`401`) for unknown user and wrong password. The web app gets the new message in AZ and EN.
 - **Rate limit:** `express-rate-limit` on `/api/auth/login` and `/api/auth/signup`: 10 requests per 15 minutes per IP, answering `429 TOO_MANY_REQUESTS`. `app.set('trust proxy', 1)`, because Render sits in front of the API and otherwise every user looks like the same IP.
 - **CORS:** allowed origins come from `CORS_ORIGINS` (exact origins, comma-separated) and `CORS_ORIGIN_PATTERN` (a regex for this project's Vercel preview URLs). The API's own origin is always allowed, so Swagger keeps working. Local default: `http://localhost:5173`. Both values are not secret and live in `render.yaml`.

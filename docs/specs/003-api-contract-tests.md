@@ -4,7 +4,7 @@
 
 ## Why
 - **Every API check is manual today.** [Spec 002](002-backend-hardening.md) was verified with hand-written `curl` scripts, and several script bugs looked like app failures at first (see its Retro).
-- **The next specs change the API.** [004](../roadmap.md) replaces the validators with shared schemas, and [005](../roadmap.md) changes how payments are marked paid. Without tests, nothing shows what else changed by accident.
+- **The next specs change the API.** [004](004-shared-schemas.md) replaces the validators with shared schemas, and [005](../roadmap.md) changes how payments are marked paid. Without tests, nothing shows what else changed by accident.
 - **The API has no `test` script.** `apps/api/package.json` answers "no test specified", and CI only lints and builds.
 
 ## What
@@ -55,7 +55,7 @@
 **Went well**
 - Every test file was checked by breaking the code on purpose for one run (login message, missing `protect`, owner filter, toggle, helmet, `render.yaml` pattern, rate limit) and seeing the right tests fail.
 - A separate database and a `payflow-ci` user limited to it made the CI secret harmless: it cannot read `payflow-dev` or `payflow-prod`.
-- The tests found two bugs on their first run (a `null` monthly payment and a `null` toggle item answer `500`). Both are pinned and listed in [Known issues](../architecture.md#known-issues) for [004](../roadmap.md) and [005](../roadmap.md).
+- The tests found two bugs on their first run (a `null` monthly payment and a `null` toggle item answer `500`). Both are pinned and listed in [Known issues](../architecture.md#known-issues) for [004](004-shared-schemas.md) and [005](../roadmap.md).
 - The CORS tests read `render.yaml`, so the production settings are tested, not a copy of them.
 
 **Surprises**
@@ -67,6 +67,6 @@
 - The API has no lint setup at all; `nx affected -t lint` only ever checked the web app.
 
 **Next time**
-- [004](../roadmap.md) and [005](../roadmap.md) start by changing the "known bug" and toggle tests on purpose, then the code.
+- [004](004-shared-schemas.md) and [005](../roadmap.md) start by changing the "known bug" and toggle tests on purpose, then the code.
 - New API tests follow the rules in [`architecture.md`](../architecture.md#api-tests-spec-003) (plain-string error codes, request budgets per file).
 - Next on the roadmap: split CI into parallel jobs behind one gate check.
