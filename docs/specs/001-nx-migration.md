@@ -12,7 +12,7 @@ Two small fixes are included because the move needs them anyway:
 - The web app reads the API URL from `VITE_API_BASE_URL`. Today the env var is ignored and every build talks to production.
 - Folder renames: `componenets` → `components`, `InstallmentDetails.tsx/` → `InstallmentDetails/`.
 
-**Not included:** security fixes ([002](002-backend-hardening.md)), dependency upgrades, shared libs ([004](../roadmap.md)), Nx plugins, tests, staging.
+**Not included:** security fixes ([002](002-backend-hardening.md)), dependency upgrades, shared libs ([004](004-shared-schemas.md)), Nx plugins, tests, staging.
 
 ## Done when
 1. ✅ `git log --follow apps/web/src/App.tsx` and `apps/api/src/index.ts` show the original 2025 commits.
