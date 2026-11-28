@@ -15,10 +15,11 @@ services:
     healthCheckPath: /
     # Deploy a new commit on main only after its CI checks pass.
     autoDeployTrigger: checksPass
-    # Rebuild only when the API or the shared root config changes.
+    # Rebuild only when the API, a shared library or the root config changes.
     buildFilter:
       paths:
         - apps/api/**
+        - libs/**
         - package.json
         - package-lock.json
         - nx.json
